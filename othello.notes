@@ -1,0 +1,9 @@
+// notes for how to do othello
+
+Initiliaze board. 
+
+For each board state in game:
+	Generate list of potentials moves
+	Produces scores for each possible board state with alphabeta()
+	Pick entry in list with maximum returned value from alpabeta()
+	Opposing player moves
