@@ -1,7 +1,3 @@
-#include <iostream>
-#include <unordered_map>
-#include <cmath>
-
 using namespace std;
 
 class othelloBoard {
@@ -12,13 +8,13 @@ class othelloBoard {
 
 public:	
 
-	void firstMove() {
-		// positions[0] = 1;
-		positions[27] = 1;
-		positions[28] = -1;
-		positions[35] = -1;
-		positions[36] = 1;
-	}
+	// void firstMove() {
+	// 	// positions[0] = 1;
+	// 	positions[27] = 1;
+	// 	positions[28] = -1;
+	// 	positions[35] = -1;
+	// 	positions[36] = 1;
+	// }
 
 	void draw() {
 		// for (int i = 0; i < n; i++)
@@ -46,10 +42,16 @@ public:
 		}
 	}
 
-};
+	void validMoves () {
 
-int main () {
-	othelloBoard board; 
-	board.firstMove();
-	board.draw();
-}
+	}
+
+	void printValidMoves () {
+
+	}
+
+	void updatePositions () {
+		
+	}
+
+};
