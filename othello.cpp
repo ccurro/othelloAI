@@ -1,15 +1,27 @@
 #include <iostream>
 #include <unordered_map>
 #include <cmath>
+#include <vector>
+#include <assert.h>
+#include "player.h"
 #include "board.h"
 #include "game.h"
 
 int main () {
-	othelloBoard board; 
-	othelloGame game (board);
+    othelloBoard board; 
+    othelloGame game (board, false, false);
+    player playerOne (false, true, board.n);
+    player playerTwo (true, false, board.n);
 
-	for (int i=0; i < 10; i++) {
-		game.computerMove();
-		game.playerMove();
-	};	
+    if (game.newGame) {
+        cout << "New Game\n";
+        game.firstMove();
+    }
+
+    while (!game.complete) {
+        board.draw();
+        game.move(playerOne); // player one moves
+        game.move(playerTwo); // player two moves
+        game.statusUpdate(); // updates value of game.complete 
+    };  
 }

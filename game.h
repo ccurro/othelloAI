@@ -1,25 +1,39 @@
 using namespace std;
 
 class othelloGame {
-	othelloBoard board;
+    othelloBoard board;
 
 public:
-	othelloGame(othelloBoard a) {
-		board = a;
-	}
+    bool complete = false; // boolean if game is complete or not.
+    bool newGame = true;
+    bool humanPlayer, humanPlayerFirst;
 
-	void computerMove() {
-		board.validMoves();
-		// alphabeta(); // return scores for each move 
-		board.updatePositions(); // argument is new positions array
-		cout << "Computer Move Completed \n";
-	}
+    othelloGame(othelloBoard a, bool b, bool c) {
+        board = a; 
+        humanPlayer = b;
+        humanPlayerFirst = c;
+        assert(!(!humanPlayer && humanPlayerFirst)); 
+        // make sure humanPlayerFirst isn't true, when there
+        // isn't a human player.
+    }
 
-	void playerMove() {
-		board.validMoves();
-		board.printValidMoves(); // prints valid moves on screen for player
-		// selectMove() // player selects moves 
-		board.updatePositions();
-		cout << "Player Move Completed \n";
-	}
+    void firstMove() {
+        vector<int> pos(board.n,0);
+        pos[27] = 1;
+        pos[28] = -1;
+        pos[35] = -1;
+        pos[36] = 1;
+        board.updatePositions(pos);
+    }
+
+    void move(player p) {
+        unordered_map<int, vector<int>> moves = board.validMoves();
+        vector<int> pos = p.selectMove(moves);
+        board.updatePositions(pos);
+    }
+
+    void statusUpdate() {
+        complete = true; // for this will stop game after one move.
+        cout << "Game is complete.\n";
+    }
 };
