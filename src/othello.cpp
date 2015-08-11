@@ -9,7 +9,7 @@
 
 int main () {
     othelloBoard board; 
-    othelloGame game (board, false, false);
+    othelloGame game (&board, false, false);
     player playerOne (false, true, board.n);
     player playerTwo (true, false, board.n);
 
