@@ -18,10 +18,11 @@ int main () {
         game.firstMove();
     }
 
-    while (!game.complete) {
+    // while (!game.complete) {
         board.draw();
         game.move(playerOne); // player one moves
-        game.move(playerTwo); // player two moves
-        game.statusUpdate(); // updates value of game.complete 
-    };  
+        // board.draw();
+        // game.move(playerTwo); // player two moves
+        // game.statusUpdate(); // updates value of game.complete 
+    // };  
 }

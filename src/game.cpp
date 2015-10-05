@@ -19,17 +19,19 @@ othelloGame::othelloGame(othelloBoard* a, bool b, bool c) {
 
 void othelloGame::firstMove() {
 	vector<int> pos(board->n,0);
-	pos[27] = 1;
-	pos[28] = -1;
-	pos[35] = -1;
-	pos[36] = 1;
+	pos[8]  = 1;
+	// pos[27] = 1;
+	// pos[28] = -1;
+	// pos[35] = -1;
+	// pos[36] = 1;
 	board->updatePositions(pos);
 }
 
 void othelloGame::move(player p) {
 	unordered_map<int, vector<int>> moves = board->validMoves();
 	vector<int> pos = p.selectMove(moves);
-	board->updatePositions(pos);
+	// board->updatePositions(pos);
+	board->draw();
 }
 
 void othelloGame::statusUpdate() {
