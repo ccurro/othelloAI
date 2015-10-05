@@ -19,7 +19,7 @@ othelloGame::othelloGame(othelloBoard* a, bool b, bool c) {
 
 void othelloGame::firstMove() {
 	vector<int> pos(board->n,0);
-	pos[8]  = 1;
+	pos[21]  = 1;
 	// pos[27] = 1;
 	// pos[28] = -1;
 	// pos[35] = -1;

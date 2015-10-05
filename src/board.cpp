@@ -72,15 +72,19 @@ unordered_map<int, vector<int>> othelloBoard::validMoves () {
                     printf("%d\n",i+j);
                     positions[i+j] = 2;
                 }
-                // down and left
-                for (int j = 7; (i+j < n - 1) && ((i + j -1) % 8) > 0; j+=7) {
+                // // down and left
+                for (int j = 7; (i+j < n - 1); j+=7) {
                     printf("%d\n",i+j);
                     positions[i+j] = 2;
+                    if ((i+j) % 8 == 0)
+                        break;
                 }
                 // up and left
-                for (int j = -9; i+j > -1 && ((i + j -1) % 8) > 0; j+=-9) {
+                for (int j = -9; i+j > -1; j+=-9) {
                     printf("%d\n",i+j);
                     positions[i+j] = 2;
+                    if ((i+j) % 8 == 0)
+                        break;
                 }
                 // down and right
                 for (int j = 9; i+j < n && ((i + j -1) % 8) < 7; j+=9) {
