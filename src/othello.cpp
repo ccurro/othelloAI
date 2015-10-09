@@ -21,7 +21,7 @@ int main () {
     // while (!game.complete) {
         board.draw();
         game.move(playerOne); // player one moves
-        // board.draw();
+        board.draw();
         // game.move(playerTwo); // player two moves
         // game.statusUpdate(); // updates value of game.complete 
     // };  
