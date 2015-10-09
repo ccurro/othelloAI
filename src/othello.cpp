@@ -10,19 +10,17 @@
 int main () {
     othelloBoard board; 
     othelloGame game (&board, false, false);
-    player playerOne (false, true, board.n);
-    player playerTwo (true, false, board.n);
+    player playerOne (false, true, board.n,1);
+    player playerTwo (false, false, board.n,-1);
 
     if (game.newGame) {
         cout << "New Game\n";
         game.firstMove();
     }
 
-    // while (!game.complete) {
-        board.draw();
+    while (!game.complete) {
         game.move(playerOne); // player one moves
-        board.draw();
-        // game.move(playerTwo); // player two moves
-        // game.statusUpdate(); // updates value of game.complete 
-    // };  
+        game.move(playerTwo);
+        game.statusUpdate(); // updates value of game.complete 
+    };  
 }

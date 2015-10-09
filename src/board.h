@@ -16,11 +16,11 @@ public:
 
     othelloBoard();
 
-    void draw();
-
-    unordered_map<int, vector<int>> validMoves ();
+    void draw(unordered_map<int, list<int>> moves);
+    // unordered_map<int, list<int>> moves;
+    unordered_map<int, list<int>> validMoves (player p);
 
     void printValidMoves();
 
-    void updatePositions(vector<int> newPositions);
+    void updatePositions(pair<int, list<int>> move, player p);
 };

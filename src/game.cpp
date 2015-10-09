@@ -19,35 +19,24 @@ othelloGame::othelloGame(othelloBoard* a, bool b, bool c) {
 
 void othelloGame::firstMove() {
 	vector<int> pos(board->n,0);
-	// pos[13] = -1;
-
-	// pos[21]  = 1;
-	// pos[22] = -1;
-	// pos[28] = -1;
-	// pos[29] = -1;
-
-	// pos[0] = -1;
-	// pos[8] = 1;
-
-	// pos[63] = 1;
-	// pos[62] = -1;
 
 
 	pos[27] = 1;
 	pos[28] = -1;
 	pos[35] = -1;
 	pos[36] = 1;
-	board->updatePositions(pos);
+	board->positions.swap(pos);
 }
 
 void othelloGame::move(player p) {
-	unordered_map<int, vector<int>> moves = board->validMoves();
-	vector<int> pos = p.selectMove(moves);
-	// board->updatePositions(pos);
-	// board->draw();
+	unordered_map<int, list<int>> moves = board->validMoves(p);
+	board->draw(moves);
+	pair<int, list<int>> move = p.selectMove(moves);
+
+	board->updatePositions(move,p);
 }
 
 void othelloGame::statusUpdate() {
-        complete = true; // for this will stop game after one move.
+        complete = false;
         cout << "Game is complete.\n";
     }

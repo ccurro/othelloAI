@@ -1,3 +1,4 @@
+#include <list>
 using namespace std;
 
 class player {
@@ -5,12 +6,13 @@ class player {
     int playerId;
     int n;
 
-    vector<int> computerMove(unordered_map<int, vector<int>> validMoves);
+    pair<int, list<int>> computerMove(unordered_map<int, list<int>> validMoves);
 
-    vector<int> interactiveMove(unordered_map<int, vector<int>> validMoves);
+    vector<int> interactiveMove(unordered_map<int, list<int>> validMoves);
 
 public:
-    player(bool a, bool b, int c);
+    int symbol;
+    player(bool a, bool b, int c, int d);
 
-    vector<int> selectMove(unordered_map<int, vector<int>> validMoves);
+    pair<int, list<int>> selectMove(unordered_map<int, list<int>> validMoves);
 };
