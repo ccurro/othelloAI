@@ -30,13 +30,24 @@ void othelloGame::firstMove() {
 
 void othelloGame::move(player p) {
 	unordered_map<int, list<int>> moves = board->validMoves(p);
-	board->draw(moves);
-	pair<int, list<int>> move = p.selectMove(moves);
+	if (moves.empty()) {
+		passes[p.playerId] = 1;
+		cout << "Pass!\n";
+	} else {
+		passes[p.playerId] = 0;
+		board->draw(moves);
+		pair<int, list<int>> move = p.selectMove(moves);
 
-	board->updatePositions(move,p);
+		board->updatePositions(move,p);
+	}
 }
 
 void othelloGame::statusUpdate() {
-        complete = false;
-        cout << "Game is complete.\n";
+		cout << passes[0] + passes[1];
+		if (passes[0] + passes[1] == 2) {
+	        complete = true;
+    	    cout << "Game is complete.\n";
+    	} else {
+			complete = false;
+    	}
     }
