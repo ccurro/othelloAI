@@ -32,7 +32,6 @@ void othelloGame::move(player p) {
 	unordered_map<int, list<int>> moves = board->validMoves(p);
 	if (moves.empty()) {
 		passes[p.playerId] = 1;
-		cout << "Pass!\n";
 	} else {
 		passes[p.playerId] = 0;
 		board->draw(moves);
@@ -43,9 +42,10 @@ void othelloGame::move(player p) {
 }
 
 void othelloGame::statusUpdate() {
-		cout << passes[0] + passes[1];
 		if (passes[0] + passes[1] == 2) {
 	        complete = true;
+	        unordered_map<int, list<int>> moves;
+	        board->draw(moves);
     	    cout << "Game is complete.\n";
     	} else {
 			complete = false;

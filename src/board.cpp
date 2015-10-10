@@ -19,17 +19,17 @@ void othelloBoard::draw(unordered_map<int, list<int>> moves) {
     cout << "  A B C D E F G H\n";
     int r = 0;
     for (int i = 0; i < n; i+=height ) {
-        cout << ++r << "\e[48;5;40m\e[38;5;232m \033[0m";
+        cout << ++r << "\e[48;5;34m\e[38;5;232m \033[0m";
         for (int j = i; j < i+width; j++) {
             if (positions[j] == 1) {
-                cout << "\e[48;5;40m\e[38;5;256m\u25CF" << " \033[0m";
+                cout << "\e[48;5;34m\e[38;5;256m\u25CF" << " \033[0m";
             } else if (positions[j] == -1) {
-                cout << "\e[48;5;40m\e[38;5;232m\u25CF" << " \033[0m";
+                cout << "\e[48;5;34m\e[38;5;232m\u25CF" << " \033[0m";
             } else if (moves.find(j) != moves.end()) {
-                cout << "\e[48;5;40m\e[38;5;256m\u25AB" << " \033[0m";
+                cout << "\e[48;5;34m\e[38;5;232m\u2613" << " \033[0m";
             } 
             else {
-                cout << "\e[48;5;40m\e[38;5;232m\u00B7 \033[0m";
+                cout << "\e[48;5;34m\e[38;5;232m\u00B7 \033[0m";
             }
         }
         cout << endl;
