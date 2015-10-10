@@ -8,7 +8,7 @@ class player {
 
     pair<int, list<int>> computerMove(unordered_map<int, list<int>> validMoves);
 
-    vector<int> interactiveMove(unordered_map<int, list<int>> validMoves);
+    pair<int, list<int>>  interactiveMove(unordered_map<int, list<int>> validMoves);
 
 public:
     int symbol;

@@ -17,7 +17,6 @@ public:
     othelloBoard();
 
     void draw(unordered_map<int, list<int>> moves);
-    // unordered_map<int, list<int>> moves;
     unordered_map<int, list<int>> validMoves (player p);
 
     void printValidMoves();

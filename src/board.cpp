@@ -42,13 +42,13 @@ void othelloBoard::draw(unordered_map<int, list<int>> moves) {
 
     for (auto kv : moves) {
         ind2sub(kv.first, width, height, &row, &col);
-        cout << "Possible Move " << i << ": " << alpha[col] << nums[row] << ", ";
+        cout << "Possible Move " << i << ": " << alpha[col] << nums[row+1] << ", ";
         list<int>::const_iterator k;
         list<int> l = kv.second;
         cout << "Pieces to be flipped:";
         for (k = l.begin(); k != l.end(); k++) {
             ind2sub(*k, width, height, &row, &col);
-            cout << " "<< alpha[col] << nums[row] << ",";
+            cout << " "<< alpha[col] << nums[row+1] << ",";
         }
 
         cout << endl;
@@ -64,7 +64,6 @@ void othelloBoard::ind2sub(const int sub,const int cols,const int rows,int *row,
 void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, list<int>> & pieces) {
     list<int> candidates;
     for (int j = inc; (i + j < n) && (i + j > -1); j+=inc) {
-        // printf("%d\n",i+j);
         int pos = positions[i+j];
         if (pos == clr)
             break;
@@ -92,24 +91,19 @@ void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, 
     }
 }
 
-// unordered_map<int, vector<intothelloBoard::validMoves () {
  unordered_map<int, list<int>> othelloBoard::validMoves (player p) {
     unordered_map<int, list<int>> moves;
-    // moves.clear();
-    // go through board positions 
-    int prevPiece;
     for (int i = 0; i < n; i+=1) {
             if (positions[i] == 0)
                 continue;
             if (positions[i] == p.symbol) {
                 // go through columns
-                // printf("For 1 piece at i = %d\n",i);
                 validMovesHelper(p.symbol, i,  8, moves);
                 validMovesHelper(p.symbol, i, -8, moves);
                 // go through rows
                 validMovesHelper(p.symbol, i,  1, moves);
                 validMovesHelper(p.symbol, i, -1, moves);
-                // printf("Diagonals:\n");
+                // go through diagnols
                 validMovesHelper(p.symbol, i, -7, moves);
                 validMovesHelper(p.symbol, i,  7, moves);
                 validMovesHelper(p.symbol, i, -9, moves);
@@ -128,7 +122,6 @@ void othelloBoard::printValidMoves () {
 void othelloBoard::updatePositions (pair<int, list<int>> move, player p) {
 
     int piece = move.first;
-    // cout << piece;
     list<int>::const_iterator k;
 
     positions[piece] = p.symbol;
@@ -136,7 +129,6 @@ void othelloBoard::updatePositions (pair<int, list<int>> move, player p) {
     list<int> l = move.second;
 
     for (k = l.begin(); k != l.end(); k++) {
-        // cout << *k;
         positions[*k] = p.symbol;
     }
 }

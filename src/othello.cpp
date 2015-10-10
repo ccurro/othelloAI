@@ -10,7 +10,7 @@
 int main () {
     othelloBoard board; 
     othelloGame game (&board, false, false);
-    player playerOne (false, true, board.n,1);
+    player playerOne (true, true, board.n,1);
     player playerTwo (false, false, board.n,-1);
 
     if (game.newGame) {
