@@ -36,19 +36,19 @@ void othelloBoard::draw(unordered_map<int, list<int>> moves) {
     }
 
     char alpha[9] = "ABCDEFGH";
-    char nums[9]  = "01234567";
+    char nums[9]  = "12345678";
     int row, col;
     int i = 1;
 
     for (auto kv : moves) {
         ind2sub(kv.first, width, height, &row, &col);
-        cout << "Possible Move " << i << ": " << alpha[col] << nums[row+1] << ", ";
+        cout << "Possible Move " << i << ": " << alpha[col] << nums[row] << ", ";
         list<int>::const_iterator k;
         list<int> l = kv.second;
         cout << "Pieces to be flipped:";
         for (k = l.begin(); k != l.end(); k++) {
             ind2sub(*k, width, height, &row, &col);
-            cout << " "<< alpha[col] << nums[row+1] << ",";
+            cout << " "<< alpha[col] << nums[row] << ",";
         }
 
         cout << endl;
@@ -64,6 +64,16 @@ void othelloBoard::ind2sub(const int sub,const int cols,const int rows,int *row,
 void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, list<int>> & pieces) {
     list<int> candidates;
     for (int j = inc; (i + j < n) && (i + j > -1); j+=inc) {
+        // first check to make sure don't wrap around board
+        // check to see that diff in cols and rows doesn't exceed 1
+        // only do after first loop
+        if (j != i) {
+            int crow, ccol, prow, pcol;
+            ind2sub(i+j-inc, width, height, &prow, &pcol);
+            ind2sub(i+j,     width, height, &crow, &ccol);
+            if (abs(crow - prow) > 1 || abs(ccol - pcol) > 1 )
+                break;
+        }
         int pos = positions[i+j];
         if (pos == clr)
             break;
@@ -84,10 +94,6 @@ void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, 
             }
             break;
         }
-        int row, col;
-        ind2sub(i+j, width, height, &row, &col);
-        if ((row == 0) || (row == 7) || (col == 0) || (col == 7))
-            break;
     }
 }
 

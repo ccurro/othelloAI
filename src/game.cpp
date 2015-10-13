@@ -28,6 +28,15 @@ void othelloGame::firstMove() {
 	board->positions.swap(pos);
 }
 
+void othelloGame::loadGame() {
+	vector<int> pos(board->n,0);
+
+	
+
+	board->positions.swap(pos);
+}
+
+
 void othelloGame::move(player p) {
 	unordered_map<int, list<int>> moves = board->validMoves(p);
 	if (moves.empty()) {

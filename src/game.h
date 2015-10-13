@@ -11,7 +11,8 @@ public:
     int passes[2];
 
     othelloGame(othelloBoard* a, bool b, bool c);
-
+    
+	void loadGame();
     void firstMove();
 
     void move(player p);
