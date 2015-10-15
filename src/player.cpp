@@ -10,9 +10,20 @@ pair<int, list<int>> player::computerMove(unordered_map<int, list<int>> validMov
         // vector<int> move;
         //all of the alphabeta work.
 
-        unordered_map<int, list<int>>::iterator kv = validMoves.begin();
+        // Pick Random move
+        // unordered_map<int, list<int>>::iterator kv = validMoves.begin();
+        // pair<int, list<int>> move = *kv;
 
-        pair<int, list<int>> move = *kv;
+        // Pick move that maximizes discs flipped
+        int nDiscs = 0;
+        pair<int, list<int>> move;
+        for (auto kv : validMoves) {
+            list<int> flips = kv.second;
+            if (flips.size() > nDiscs) {
+                move = kv;
+                nDiscs = flips.size();
+            }
+        }
 
         return move;
     }
@@ -42,7 +53,7 @@ player::player(bool a, bool b, int c, int d) {
         symbol = d;
     }
 
-pair<int, list<int>> player::selectMove(unordered_map<int, list<int>> validMoves) { 
+pair<int, list<int>> player::selectMove(othelloBoard board, unordered_map<int, list<int>> validMoves) { 
         // vector<int> move;
         pair<int, list<int>> kv;
         if (humanPlayer == true) {

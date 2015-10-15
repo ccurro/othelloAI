@@ -2,7 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <list>
-#include "player.h"
+// #include "player.h"
 #include "board.h"
 
 using namespace std;
@@ -97,40 +97,40 @@ void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, 
     }
 }
 
- unordered_map<int, list<int>> othelloBoard::validMoves (player p) {
+ unordered_map<int, list<int>> othelloBoard::validMoves (int symbol) {
     unordered_map<int, list<int>> moves;
     for (int i = 0; i < n; i+=1) {
             if (positions[i] == 0)
                 continue;
-            if (positions[i] == p.symbol) {
+            if (positions[i] == symbol) {
                 // go through columns
-                validMovesHelper(p.symbol, i,  8, moves);
-                validMovesHelper(p.symbol, i, -8, moves);
+                validMovesHelper(symbol, i,  8, moves);
+                validMovesHelper(symbol, i, -8, moves);
                 // go through rows
-                validMovesHelper(p.symbol, i,  1, moves);
-                validMovesHelper(p.symbol, i, -1, moves);
+                validMovesHelper(symbol, i,  1, moves);
+                validMovesHelper(symbol, i, -1, moves);
                 // go through diagnols
-                validMovesHelper(p.symbol, i, -7, moves);
-                validMovesHelper(p.symbol, i,  7, moves);
-                validMovesHelper(p.symbol, i, -9, moves);
-                validMovesHelper(p.symbol, i,  9, moves);
+                validMovesHelper(symbol, i, -7, moves);
+                validMovesHelper(symbol, i,  7, moves);
+                validMovesHelper(symbol, i, -9, moves);
+                validMovesHelper(symbol, i,  9, moves);
             }
-            if (positions[i] == -p.symbol)
+            if (positions[i] == -symbol)
                 continue;
         }
     return moves;
 }
 
-void othelloBoard::updatePositions (pair<int, list<int>> move, player p) {
+void othelloBoard::updatePositions (pair<int, list<int>> move, int symbol) {
 
     int piece = move.first;
     list<int>::const_iterator k;
 
-    positions[piece] = p.symbol;
+    positions[piece] = symbol;
 
     list<int> l = move.second;
 
     for (k = l.begin(); k != l.end(); k++) {
-        positions[*k] = p.symbol;
+        positions[*k] = symbol;
     }
 }

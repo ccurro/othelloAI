@@ -3,8 +3,6 @@
 #include <unordered_map>
 #include <fstream>
 #include <assert.h>
-#include "player.h"
-#include "board.h"
 #include "game.h"
 
 using namespace std;
@@ -54,15 +52,15 @@ void othelloGame::loadGame(string gameFileName) {
 
 
 void othelloGame::move(player p) {
-	unordered_map<int, list<int>> moves = board->validMoves(p);
+	unordered_map<int, list<int>> moves = board->validMoves(p.symbol);
 	if (moves.empty()) {
 		passes[p.playerId] = 1;
 	} else {
 		passes[p.playerId] = 0;
 		board->draw(moves);
-		pair<int, list<int>> move = p.selectMove(moves);
+		pair<int, list<int>> move = p.selectMove(*board,moves);
 
-		board->updatePositions(move,p);
+		board->updatePositions(move,p.symbol);
 	}
 }
 

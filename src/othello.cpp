@@ -4,8 +4,6 @@
 #include <vector>
 #include <limits.h>
 #include <assert.h>
-#include "player.h"
-#include "board.h"
 #include "game.h"
 
 int main () {
