@@ -121,10 +121,6 @@ void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, 
     return moves;
 }
 
-void othelloBoard::printValidMoves () {
-
-}
-
 void othelloBoard::updatePositions (pair<int, list<int>> move, player p) {
 
     int piece = move.first;

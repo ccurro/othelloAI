@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <fstream>
 #include <assert.h>
 #include "player.h"
 #include "board.h"
@@ -20,7 +21,6 @@ othelloGame::othelloGame(othelloBoard* a, bool b, bool c) {
 void othelloGame::firstMove() {
 	vector<int> pos(board->n,0);
 
-
 	pos[27] = 1;
 	pos[28] = -1;
 	pos[35] = -1;
@@ -28,12 +28,28 @@ void othelloGame::firstMove() {
 	board->positions.swap(pos);
 }
 
-void othelloGame::loadGame() {
+void othelloGame::loadGame(string gameFileName) {
 	vector<int> pos(board->n,0);
-
-	
-
+	ifstream gameFile;
+	string line;
+	gameFile.open(gameFileName);
+	int ind = 0;
+	while (getline(gameFile,line)) {
+		for (int i = 0; i < 16; i+=2) {
+			cout << line[i] << endl;
+			char c = line[i];
+			if (c == 'B')
+				pos[ind] = -1;
+			if (c == 'W')
+				pos[ind] = 1;
+			if (c == '0')
+				pos[ind] = 0;
+			cout << ind << endl;
+			ind++;
+		}
+	}
 	board->positions.swap(pos);
+	gameFile.close();
 }
 
 
