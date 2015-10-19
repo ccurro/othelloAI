@@ -6,8 +6,9 @@ class player {
     bool humanPlayer;
 
     int n;
-
-    pair<int, list<int>> computerMove(unordered_map<int, list<int>> validMoves);
+    int heuristic(vector<int> positions);
+    int miniMax(othelloBoard board, int depth, bool maximizingPlayer);
+    pair<int, list<int>> computerMove(othelloBoard board, unordered_map<int, list<int>> validMoves);
 
     pair<int, list<int>>  interactiveMove(unordered_map<int, list<int>> validMoves);
 
