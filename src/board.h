@@ -14,9 +14,11 @@ public:
     const static int n = width*height;
     vector<int> positions;
 
+    int nMoves = 0;
+
     othelloBoard();
 
-    void draw(unordered_map<int, list<int>> moves);
+    void draw(unordered_map<int, list<int>> moves, int symbol);
     unordered_map<int, list<int>> validMoves (int symbol);
 
     void updatePositions(pair<int, list<int>> move, int symbol);

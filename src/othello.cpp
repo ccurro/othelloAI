@@ -21,8 +21,9 @@ int main () {
     if (choice == 1)
         game.newGame = false;
 
-    player playerOne (true, true, board.n,1);
-    player playerTwo (false, false, board.n,-1);
+    // humanPlayer, playerId, n, symbol 
+    player playerOne (true, 1, board.n,1);
+    player playerTwo (false, 0, board.n,-1);
 
 
     if (game.newGame) {

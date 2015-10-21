@@ -57,7 +57,7 @@ void othelloGame::move(player p) {
 		passes[p.playerId] = 1;
 	} else {
 		passes[p.playerId] = 0;
-		board->draw(moves);
+		board->draw(moves,p.symbol);
 		pair<int, list<int>> move = p.selectMove(*board,moves);
 
 		board->updatePositions(move,p.symbol);
@@ -68,7 +68,7 @@ void othelloGame::statusUpdate() {
 		if (passes[0] + passes[1] == 2) {
 	        complete = true;
 	        unordered_map<int, list<int>> moves;
-	        board->draw(moves);
+	        board->draw(moves,1);
     	    cout << "Game is complete.\n";
     	} else {
 			complete = false;

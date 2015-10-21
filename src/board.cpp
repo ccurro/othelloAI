@@ -9,10 +9,11 @@ using namespace std;
 
 othelloBoard::othelloBoard() {
     positions.assign(64,0);
-    positions[1] = 1;
+    // positions[1] = 1;
 }
 
-void othelloBoard::draw(unordered_map<int, list<int>> moves) {
+// 1 is black, -1 is white
+void othelloBoard::draw(unordered_map<int, list<int>> moves, int symbol) {
     if (&positions) {
         fprintf(stderr,"%x\n",&positions);
     }
@@ -25,8 +26,10 @@ void othelloBoard::draw(unordered_map<int, list<int>> moves) {
                 cout << "\e[48;5;34m\e[38;5;256m\u25CF" << " \033[0m";
             } else if (positions[j] == -1) {
                 cout << "\e[48;5;34m\e[38;5;232m\u25CF" << " \033[0m";
-            } else if (moves.find(j) != moves.end()) {
+            } else if (moves.find(j) != moves.end() && symbol == -1) {
                 cout << "\e[48;5;34m\e[38;5;232m\u2613" << " \033[0m";
+            } else if (moves.find(j) != moves.end() && symbol == 1) {
+                cout << "\e[48;5;34m\e[38;5;256m\u2613" << " \033[0m";
             } 
             else {
                 cout << "\e[48;5;34m\e[38;5;232m\u00B7 \033[0m";
@@ -133,4 +136,6 @@ void othelloBoard::updatePositions (pair<int, list<int>> move, int symbol) {
     for (k = l.begin(); k != l.end(); k++) {
         positions[*k] = symbol;
     }
+
+    nMoves++;
 }

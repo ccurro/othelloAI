@@ -5,21 +5,53 @@
 #include <numeric>
 #include <limits>
 #include <algorithm>  
+#include <ratio>
+#include <chrono>
 #include "player.h"
 
 using namespace std;
+
+chrono::time_point<std::chrono::system_clock> tic() {
+    return chrono::system_clock::now();
+}
+
+chrono::duration<double> toc(chrono::time_point<std::chrono::system_clock> start) {
+    chrono::time_point<std::chrono::system_clock> end = chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    return elapsed_seconds;
+}
+
 
 int player::heuristic(vector<int> positions) {
     return accumulate(positions.begin(), positions.end(), 0);
 }
 
-int player::miniMax(othelloBoard board, int depth, bool maximizingPlayer) {
+int player::miniMax(othelloBoard board, int depth, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start) {
+    chrono::duration<double> elapsed_seconds = toc(start);
+    if (elapsed_seconds.count() > 0.99*limit) {
+        return numeric_limits<int>::max() -1;
+    }
+
     int bestValue;
     unordered_map<int, list<int>> validMoves = board.validMoves(symbol);
 
-    if (depth == 0) {
+    // check if game is complete
+    int gameComplete = false;
+    if (validMoves.begin() == validMoves.end()) {
+        unordered_map<int, list<int>> otherValidMoves = board.validMoves(-symbol);
+        if (otherValidMoves.begin() == otherValidMoves.end()) {
+            gameComplete = true;
+        }
+    }
+
+    // if (gameComplete == true)
+        // return numeric_limits<int>::max();
+
+    if (depth == 0 || gameComplete) {
         // call heuristic - in this case most pieces
         bestValue = heuristic(board.positions);
+        if (symbol == -1)
+            bestValue = -1*bestValue;
         return bestValue;
     }
 
@@ -28,7 +60,8 @@ int player::miniMax(othelloBoard board, int depth, bool maximizingPlayer) {
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
             scratchBoard.updatePositions(kv,symbol);
-            int val = miniMax(scratchBoard, depth -1, false);
+            nodesVisited++;
+            int val = miniMax(scratchBoard, depth -1, false,nodesVisited, start);
             bestValue = max(val,bestValue);
         } 
         return bestValue;
@@ -36,16 +69,19 @@ int player::miniMax(othelloBoard board, int depth, bool maximizingPlayer) {
         bestValue = numeric_limits<int>::max();
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
-            scratchBoard.updatePositions(kv,symbol);
-            int val = miniMax(scratchBoard, depth -1, true);
-            bestValue = max(val,bestValue);
+            scratchBoard.updatePositions(kv,-symbol);
+            nodesVisited++;
+            int val = miniMax(scratchBoard, depth -1, true, nodesVisited, start);
+            bestValue = min(val,bestValue);
         } 
         return bestValue;
     }
     return bestValue;    
 }
 
+
 pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int, list<int>> validMoves) {
+        chrono::time_point<std::chrono::system_clock> start = tic();
         // vector<int> move;
         //all of the alphabeta work.
 
@@ -65,20 +101,44 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
         // }
 
         // miniMax
+        int nodesVisited = 0;
         pair<int, list<int>> move;
+        pair<int, list<int>> tmpmove;
         int bestVal = numeric_limits<int>::min();
-        for (auto kv : validMoves) {
-            othelloBoard scratchBoard = board;
-            scratchBoard.updatePositions(kv,symbol);
-            int val = miniMax(scratchBoard, 4, true);
-            if (val > bestVal) {
-                bestVal = val;
-                move = kv;
+        int d;
+        for (d = 1; d < 64 - board.nMoves; d++) {
+            cout << "Searching at depth " << d << endl;
+            int val;
+            int nodesVisitedTmp = nodesVisited;
+            for (auto kv : validMoves) {
+                othelloBoard scratchBoard = board;
+                scratchBoard.updatePositions(kv,symbol);
+                nodesVisited++;
+                val = miniMax(scratchBoard, d, true, nodesVisitedTmp, start);
+                if (val > bestVal && val != (numeric_limits<int>::max() -1)) {
+                    bestVal = val;
+                    tmpmove = kv;
+                } else if (val == (numeric_limits<int>::max() -1)) {
+                    break;
+                }
+            }
+            if (val != (numeric_limits<int>::max() -1)) {
+                    move = tmpmove;
+                    nodesVisited = nodesVisitedTmp;
+            } else {
+                break;
             }
         }
 
+        chrono::duration<double> elapsed_seconds = toc(start);
+
+        cout << "\nCompleted search to depth " << d-1 << endl;
+        cout << "\nNodes visited: " << nodesVisited << endl; 
+        cout << "Time to move: " << elapsed_seconds.count() << " seconds" << endl << endl;
+
         return move;
     }
+
 pair<int, list<int>> player::interactiveMove(unordered_map<int, list<int>> validMoves) {
         pair<int, list<int>> move;
         int ind;
