@@ -9,6 +9,7 @@ class player {
     int n;
     float limit = 1;
     int heuristic(vector<int> positions);
+    int alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start);
     int miniMax(othelloBoard board, int depth, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start);
     pair<int, list<int>> computerMove(othelloBoard board, unordered_map<int, list<int>> validMoves);
 
