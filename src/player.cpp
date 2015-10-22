@@ -92,67 +92,6 @@ int player::heuristic(othelloBoard board, int nSpacesRemaining) {
     return val;
 }
 
-// int player::miniMax(othelloBoard board, int depth, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start) {
-//     chrono::duration<double> elapsed_seconds = toc(start);
-//     if (elapsed_seconds.count() > 0.99*limit) {
-//         return numeric_limits<int>::max() - 1;
-//     }
-
-//     int bestValue;
-//     unordered_map<int, list<int>> validMoves = board.validMoves(symbol);
-
-//     // check if game is complete
-//     // int gameComplete = false;
-//     // if (validMoves.begin() == validMoves.end()) {
-//     //     unordered_map<int, list<int>> otherValidMoves = board.validMoves(-symbol);
-//     //     if (otherValidMoves.begin() == otherValidMoves.end()) {
-//     //         gameComplete = true;
-//     //     }
-//     // }
-//     if (validMoves.begin() == validMoves.end()) {
-//         unordered_map<int, list<int>> otherValidMoves = board.validMoves(-symbol);
-//         if (otherValidMoves.begin() == otherValidMoves.end()) {
-//             // gameComplete = true;
-//             int s = symbol*accumulate(board.positions.begin(), board.positions.end(), 0);
-//             if (s > 0)
-//                 return 3000;
-//             if (s < 0)
-//                 return -3000;
-//         }
-//     }
-
-
-//     if (depth == 0) {
-//         // call heuristic - in this case most pieces
-//         bestValue = heuristic(board, 64 - board.nMoves);
-//         if (symbol == -1)
-//             bestValue = -1*bestValue;
-//         return bestValue;
-//     }
-
-//     if (maximizingPlayer) {
-//         bestValue = numeric_limits<int>::min();
-//         for (auto kv : validMoves) {
-//             othelloBoard scratchBoard = board;
-//             scratchBoard.updatePositions(kv,symbol);
-//             nodesVisited++;
-//             int val = miniMax(scratchBoard, depth -1, false,nodesVisited, start);
-//             bestValue = max(val,bestValue);
-//         } 
-//         return bestValue;
-//     } else {
-//         bestValue = numeric_limits<int>::max();
-//         for (auto kv : validMoves) {
-//             othelloBoard scratchBoard = board;
-//             scratchBoard.updatePositions(kv,-symbol);
-//             nodesVisited++;
-//             int val = miniMax(scratchBoard, depth -1, true, nodesVisited, start);
-//             bestValue = min(val,bestValue);
-//         } 
-//         return bestValue;
-//     }
-//     return bestValue;    
-// }
 
 int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start) {
     chrono::duration<double> elapsed_seconds = toc(start);
@@ -164,12 +103,10 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
     unordered_map<int, list<int>> validMoves = board.validMoves(symbol);
 
     // check if game is complete
-    // int gameComplete = false;
     int s = 0;
     if (validMoves.begin() == validMoves.end()) {
         unordered_map<int, list<int>> otherValidMoves = board.validMoves(-symbol);
         if (otherValidMoves.begin() == otherValidMoves.end()) {
-            // gameComplete = true;
             int s = symbol*accumulate(board.positions.begin(), board.positions.end(), 0);
             if (s > 0)
                 return 4567890;
@@ -183,32 +120,24 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         bestValue = heuristic(board,60 - board.nMoves);
         if (symbol == -1)
             bestValue = -1*bestValue;
-        // cout << "heuristc " << bestValue << endl;
         return bestValue;
     }
 
     if (maximizingPlayer) {
-        // bestValue = numeric_limits<int>::min();
         bestValue = -bigNo;
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
             scratchBoard.updatePositions(kv,symbol);
             nodesVisited++;
             int val = alphaBeta(scratchBoard, depth -1, alpha, beta, false, nodesVisited, start);
-            // cout << "Value: " << val << endl;
             bestValue = max(val,bestValue);
             alpha = max(alpha,bestValue);
             if (beta <= alpha) {
-                // cout << beta << " " << alpha << endl;
-                // cout << "Prune max" << endl;
                 break;
             }
         } 
         return bestValue;
     } else {
-        // bestValue = numeric_limits<int>::max();
-        // bestValue = 10;
-        // bestValue = numeric_limits<int>::min();
         bestValue = bigNo;
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
@@ -218,12 +147,10 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
             bestValue = min(val,bestValue);
             beta = min(beta,bestValue);
             if (beta <= alpha) {
-                // cout << beta << " " << alpha << endl;
-                // cout << "Prune min" << endl;
                 break;
             }
         } 
-        return -bestValue; // minux sign is in question just added
+        return -bestValue; // minus sign is in question just added
     }
     return bestValue;    
 }
@@ -232,57 +159,6 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
 
 pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int, list<int>> validMoves) {
         chrono::time_point<std::chrono::system_clock> start = tic();
-        // vector<int> move;
-        //all of the alphabeta work.
-
-        // Pick Random move
-        // unordered_map<int, list<int>>::iterator kv = validMoves.begin();
-        // pair<int, list<int>> move = *kv;
-
-        // Pick move that maximizes discs flipped
-        // int nDiscs = 0;
-        // pair<int, list<int>> move;
-        // for (auto kv : validMoves) {
-        //     list<int> flips = kv.second;
-        //     if (flips.size() > nDiscs) {
-        //         move = kv;
-        //         nDiscs = flips.size();
-        //     }
-        // }
-
-        // miniMax
-        // int nodesVisited = 0;
-        // pair<int, list<int>> move;
-        // pair<int, list<int>> tmpmove;
-        // int bestVal = numeric_limits<int>::min();
-        // int d;
-        // for (d = 5; d < 6; d++) {
-        //     cout << "Searching at depth " << d << endl;
-        //     int val;
-        //     int nodesVisitedTmp = nodesVisited;
-        //     for (auto kv : validMoves) {
-        //         othelloBoard scratchBoard = board;
-        //         scratchBoard.updatePositions(kv,symbol);
-        //         nodesVisited++;
-        //         val = miniMax(scratchBoard, d, true, nodesVisitedTmp, start);
-        //         if (val > bestVal && val != (numeric_limits<int>::max() -1)) {
-        //             bestVal = val;
-        //             tmpmove = kv;
-        //         } else if (val == (numeric_limits<int>::max() -1)) {
-        //             break;
-        //         }
-        //     }
-        //     if (val != (numeric_limits<int>::max() -1)) {
-        //             cout << "Move :" << tmpmove.first << endl;
-        //             cout << "Valu :" << val << endl;
-        //             move = tmpmove;
-        //             nodesVisited = nodesVisitedTmp;
-        //     } else {
-        //         break;
-        //     }
-        // }
-
-        // chrono::duration<double> elapsed_seconds = toc(start);
 
         // alphabeta
         int nodesVisited = 0;
@@ -294,12 +170,9 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
         }
 
         pair<int, list<int>> tmpmove;
-        // int bestVal = numeric_limits<int>::min();
         int bestVal = -bigNo;
-        // bestVal = numeric_limits<int>::min();
         int d;
         for (d = 1; d < 60 - board.nMoves; d++) {
-        // for (d = 5; d < 6; d++) {
             cout << "Searching at depth " << d << endl;
             int val;
             int nodesVisitedTmp = nodesVisited;
@@ -316,8 +189,6 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
                 }
             }
             if (val != (numeric_limits<int>::max() -1)) {
-                    // cout << "Move :" << tmpmove.first << endl;
-                    // cout << "Value :" << val << endl;
                     move = tmpmove;
                     nodesVisited = nodesVisitedTmp;
             } else {
@@ -326,7 +197,6 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
         }
 
         chrono::duration<double> elapsed_seconds = toc(start);
-        // cout << "\nValue: " << bestVal << endl;
         cout << "\nCompleted search to depth " << d-1 << endl;
         cout << "\nNodes visited: " << nodesVisited << endl; 
         cout << "Time to move: " << elapsed_seconds.count() << " seconds" << endl << endl;
