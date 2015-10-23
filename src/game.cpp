@@ -73,8 +73,10 @@ void othelloGame::statusUpdate() {
     	    cout << "Score: " << s << endl;
     	    if (s < 0) {
     	    	cout << "Black wins!" << endl;
-    	    } else {
+    	    } else if (s > 0) {
     	    	cout << "White wins!" << endl;
+    	    } else {
+    	    	cout << "Tie!" << endl;
     	    }
     	} else {
 			complete = false;
