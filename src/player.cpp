@@ -275,6 +275,16 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
             return move;
         }
 
+        if (board.nMoves < 10) {
+            pair<bool,pair<int,list<int>>> bookLookup = openingDatabase.getMove(validMoves);
+            if (bookLookup.first) {
+                cout << "Move found in opening database." << endl;
+                return bookLookup.second;
+            } else {
+                cout << "Opening lookup failed, resort to search." << endl;
+            }
+        }
+
         pair<int, list<int>> tmpmove;
         int bestVal = -bigNo;
         int d;
@@ -334,6 +344,11 @@ player::player(bool a, bool b, int c, int d) {
         playerId = b; // implicit conversion from bool to int
         n = c; // number of entries on board
         symbol = d;
+        if (!humanPlayer) {
+            openings db;
+            db.sequences = db.generateData();
+            openingDatabase = db;
+        }
     }
 
 pair<int, list<int>> player::selectMove(othelloBoard board, unordered_map<int, list<int>> validMoves) { 
