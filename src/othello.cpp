@@ -22,8 +22,8 @@ int main () {
         game.newGame = false;
 
     // humanPlayer, playerId, n, symbol 
-    player playerOne (true, 1, board.n,1);
-    player playerTwo (false, 0, board.n,-1);
+    player playerOne (false, 1, board.n,-1);
+    player playerTwo (true, 0, board.n,1);
 
 
     if (game.newGame) {

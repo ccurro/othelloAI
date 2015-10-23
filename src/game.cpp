@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <fstream>
+#include <algorithm>
 #include <assert.h>
 #include "game.h"
 
@@ -34,7 +35,6 @@ void othelloGame::loadGame(string gameFileName) {
 	int ind = 0;
 	while (getline(gameFile,line)) {
 		for (int i = 0; i < 16; i+=2) {
-			cout << line[i] << endl;
 			char c = line[i];
 			if (c == 'B')
 				pos[ind] = -1;
@@ -42,7 +42,6 @@ void othelloGame::loadGame(string gameFileName) {
 				pos[ind] = 1;
 			if (c == '0')
 				pos[ind] = 0;
-			cout << ind << endl;
 			ind++;
 		}
 	}
@@ -69,7 +68,14 @@ void othelloGame::statusUpdate() {
 	        complete = true;
 	        unordered_map<int, list<int>> moves;
 	        board->draw(moves,1);
+	        int s  = accumulate(board->positions.begin(), board->positions.end(), 0);
     	    cout << "Game is complete.\n";
+    	    cout << "Score: " << s << endl;
+    	    if (s < 0) {
+    	    	cout << "Black wins!" << endl;
+    	    } else {
+    	    	cout << "White wins!" << endl;
+    	    }
     	} else {
 			complete = false;
     	}
