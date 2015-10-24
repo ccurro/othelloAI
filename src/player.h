@@ -1,7 +1,7 @@
 #include <list>
 #include <chrono>
-#include "board.h"
 #include "openings.h"
+#include "heuristicEvaluation.h"
 using namespace std;
 
 class player {
@@ -10,7 +10,8 @@ class player {
     int n;
     float limit = 5;
     openings openingDatabase;
-    int heuristic(othelloBoard board, int nSpacesRemaining);
+    // int heuristic(othelloBoard board, int nSpacesRemaining);
+    heuristicEvaluation heuristic;
     int alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start);
     int miniMax(othelloBoard board, int depth, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start);
     pair<int, list<int>> computerMove(othelloBoard board, unordered_map<int, list<int>> validMoves);
@@ -20,7 +21,7 @@ class player {
 public:
     int symbol;
     int playerId;
-    player(bool a, bool b, int c, int d);
+    player(bool a, bool b, int c, int d, heuristicEvaluation e);
 
     pair<int, list<int>> selectMove(othelloBoard board, unordered_map<int, list<int>> validMoves);
 };

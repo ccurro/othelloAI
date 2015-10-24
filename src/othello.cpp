@@ -21,9 +21,12 @@ int main () {
     if (choice == 1)
         game.newGame = false;
 
+    vector<int> w;
+    heuristicEvaluation f;
+
     // humanPlayer, playerId, n, symbol 
-    player playerOne (false, 1, board.n,-1);
-    player playerTwo (true, 0, board.n,1);
+    player playerOne (false, 1, board.n,-1, f); // black
+    player playerTwo (false, 0, board.n,1, f);  // white
 
 
     if (game.newGame) {

@@ -13,6 +13,7 @@ private:
 public: 
     const static int n = width*height;
     vector<int> positions;
+    list<int> pastMoves;
 
     int nMoves = 0;
 

@@ -127,6 +127,7 @@ void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, 
 void othelloBoard::updatePositions (pair<int, list<int>> move, int symbol) {
 
     int piece = move.first;
+    pastMoves.push_back(piece);
     list<int>::const_iterator k;
 
     positions[piece] = symbol;
