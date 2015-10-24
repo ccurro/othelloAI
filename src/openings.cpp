@@ -11,16 +11,19 @@ openings::openings() {
 
 list<list<int>> openings::generateData(int symbol) {
 	char fName[18];
+	int nLines;
 	if (symbol == 1) {
 		sprintf(fName,"%s","whiteOpenings.csv");
+		nLines = 224;
 	} else {
 		sprintf(fName,"%s","blackOpenings.csv");
+		nLines = 397;
 	}
 	ifstream database (fName,ifstream::in);
 	char line[1024];
 	list<list<int>> seq;
 
-	for (int j = 1; j < 397; j++) {
+	for (int j = 1; j < nLines; j++) {
 		database.getline(line, 1024);
 		string str(line);
 		std::stringstream ss(str);

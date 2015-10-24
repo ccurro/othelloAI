@@ -14,7 +14,7 @@ class heuristicEvaluation {
 	private:
 
 	public:
-		vector<int> weights
+		vector<int> weights;
     	int heuristic(othelloBoard board, int nSpacesRemaining, int symbol);
 	    heuristicEvaluation();
 };

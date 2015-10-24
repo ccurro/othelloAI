@@ -31,9 +31,9 @@ int heuristicEvaluation::heuristic(othelloBoard board, int nSpacesRemaining,int 
 
         int p = validMoves.size();
         int o = otherValidMoves.size();
-        int currentMobility = trunc(100 * (p - o) /(p +o + 2));
+        int currentMobility = trunc(10 * (p - o) /(p +o + 2));
 
-        int corners = 1000*(positions[0] + positions[7] + positions[56] + positions[63]);
+        int corners = (positions[0] + positions[7] + positions[56] + positions[63]);
 
         int stability = 0;
         for (auto kv : validMoves) {
@@ -140,7 +140,9 @@ int heuristicEvaluation::heuristic(othelloBoard board, int nSpacesRemaining,int 
                 potMobilility++;
         }
 
-        val = CMAC(nSpacesRemaining + 60)*currentMobility + 99*potMobilility + 30*corners + 36*stability;
+        // val = CMAC(nSpacesRemaining + 60)*currentMobility + 99*potMobilility + 30*corners + 36*stability;
+        // cout << weights[0] << endl;
+        val = weights[0]*currentMobility + weights[1]*potMobilility + weights[2]*corners + weights[3]*stability;
 
         // cout << "Score breakdown" << endl;
         // cout << CMAC(nSpacesRemaining + 60)*currentMobility << endl;
