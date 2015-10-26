@@ -18,7 +18,7 @@ for i = 1,100,10 do
 		for k = 1,100,10 do
 			for l = 1,100,10 do
 				os.execute("cd ~/othelloAI && ./othello " .. table2str({i,j,k,l}) .. " " .. table2str({1,1,1,1}) .. " " .. " > tmpOutput")
-				os.execute("cd ~/othellAI && echo black " ..  table2str({i,j,k,l}) .. " white " ..  table2str({1,1,1,1}) .. " >> scores")
+				os.execute("cd ~/othelloAI && echo black " ..  table2str({i,j,k,l}) .. " white " ..  table2str({1,1,1,1}) .. " >> scores")
 				os.execute("cd ~/othelloAI && tail -n 2 tmpOutput >> scores")				
 			end
 		end

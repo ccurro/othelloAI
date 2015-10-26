@@ -51,7 +51,7 @@ int main (int argc, char *argv[]) {
 
     // humanPlayer, playerId, n, symbol 
     player playerOne (false, 1, board.n,-1, h1); // black
-    player playerTwo (false, 0, board.n,1, h2);  // white
+    player playerTwo (true, 0, board.n,1, h2);  // white
 
 
     if (game.newGame) {

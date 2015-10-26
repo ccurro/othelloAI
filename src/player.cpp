@@ -29,8 +29,13 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         return numeric_limits<int>::max() -1;
     }
 
+    unordered_map<int, list<int>> validMoves;
     int bestValue;
-    unordered_map<int, list<int>> validMoves = board.validMoves(symbol);
+    if (maximizingPlayer) {
+        validMoves = board.validMoves(symbol);
+    } else {
+        validMoves = board.validMoves(-symbol);
+    }
     
     if (depth < 1 || validMoves.begin() == validMoves.end()) {
         // call heuristic - in this case most pieces
@@ -67,7 +72,7 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
                 break;
             }
         } 
-        return -bestValue; // minus sign is in question just added
+        return bestValue; // minus sign is in question just added
     }
     return bestValue;    
 }
@@ -86,7 +91,7 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
             return move;
         }
 
-        if (board.nMoves < 10) {
+        if (board.nMoves < 18) {
             pair<bool,pair<int,list<int>>> bookLookup = openingDatabase.getMove(validMoves, board.pastMoves);
             if (bookLookup.first) {
                 cout << "Move found in opening database." << endl;
@@ -99,7 +104,11 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
         pair<int, list<int>> tmpmove;
         int bestVal = -bigNo;
         int d;
-        for (d = 1; d < 60 - board.nMoves; d++) {
+        for (d = 1; d < 60 - board.nMoves + 1; d++) {
+        // for (d = 2; d < 3; d++) {        
+            if (60 - board.nMoves + 1 < 10)
+                d = 60 - board.nMoves + 1;
+
             cout << "Searching at depth " << d << endl;
             int val;
             int nodesVisitedTmp = nodesVisited;
@@ -108,25 +117,27 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
                 scratchBoard.updatePositions(kv,symbol);
                 nodesVisited++;
                 val = alphaBeta(scratchBoard, d, -bigNo, bigNo, true, nodesVisitedTmp, start);
+                // cout << "Val at root: " << val << endl;
                 if (val > bestVal && val != (numeric_limits<int>::max() -1)) {
                     bestVal = val;
                     tmpmove = kv;
-                } //else if (val == bestVal && val != (numeric_limits<int>::max() -1)) {
-                    //if (rand() % 100  > 50) {
-                    //    bestVal = val;
-                    //    tmpmove = kv; 
-                    //}
-                //} 
+                } else if (val == bestVal && val != (numeric_limits<int>::max() -1)) {
+                    if ((rand() % 100)  > 50) {
+                        bestVal = val;
+                        tmpmove = kv; 
+                    }
+                } 
                 else if (val == (numeric_limits<int>::max() -1)) {
                     break;
                 }
             }
             if (val != (numeric_limits<int>::max() -1)) {
                     move = tmpmove;
-                    nodesVisited = nodesVisitedTmp;
+                    nodesVisited += nodesVisitedTmp;
             } else {
                 break;
             }
+            // cout << "best val: " << bestVal << endl;
         }
 
         chrono::duration<double> elapsed_seconds = toc(start);
