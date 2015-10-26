@@ -37,8 +37,10 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         validMoves = board.validMoves(-symbol);
     }
     
-    if (depth < 1 || validMoves.begin() == validMoves.end()) {
-        // call heuristic - in this case most pieces
+    // if (depth < 1 || validMoves.begin() == validMoves.end()) {
+    if (depth < 1 || validMoves.begin() == validMoves.end()) {        
+        // call heuristic - in this case most piece
+        // cout << "called" << endl;
         bestValue = heuristic.heuristic(board,60 - board.nMoves,symbol);
         if (symbol == -1)
             bestValue = -1*bestValue;
@@ -49,7 +51,7 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         bestValue = -bigNo;
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
-            scratchBoard.updatePositions(kv,symbol);
+            scratchBoard.updatePositions(kv,-symbol);
             nodesVisited++;
             int val = alphaBeta(scratchBoard, depth -1, alpha, beta, false, nodesVisited, start);
             bestValue = max(val,bestValue);
@@ -63,7 +65,7 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         bestValue = bigNo;
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
-            scratchBoard.updatePositions(kv,-symbol);
+            scratchBoard.updatePositions(kv,symbol);
             nodesVisited++;
             int val = alphaBeta(scratchBoard, depth -1, alpha, beta, true, nodesVisited, start);
             bestValue = min(val,bestValue);
@@ -88,6 +90,7 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
 
         if (validMoves.size() == 1) {
             move = *validMoves.begin();
+            cout << "Only one valid move." << endl;
             return move;
         }
 
@@ -104,10 +107,10 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
         pair<int, list<int>> tmpmove;
         int bestVal = -bigNo;
         int d;
-        for (d = 1; d < 60 - board.nMoves + 1; d++) {
-        // for (d = 2; d < 3; d++) {        
-            if (60 - board.nMoves + 1 < 10)
-                d = 60 - board.nMoves + 1;
+        for (d = 1; d < 60 - board.nMoves; d++) {
+        // for (d = 0; d < 1; d++) {        
+            if (60 - board.nMoves + 1 < 12)
+                d = 60 - board.nMoves;
 
             cout << "Searching at depth " << d << endl;
             int val;
@@ -144,6 +147,8 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
         cout << "\nCompleted search to depth " << d-1 << endl;
         cout << "\nNodes visited: " << nodesVisited << endl; 
         cout << "Time to move: " << elapsed_seconds.count() << " seconds" << endl << endl;
+
+        // exit(-1);
 
         return move;
     }
