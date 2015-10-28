@@ -15,6 +15,7 @@ class heuristicEvaluation {
 
 	public:
 		vector<int> weights;
+		int hIndex = 0;
     	int heuristic(othelloBoard board, int nSpacesRemaining, int symbol);
 	    heuristicEvaluation();
 };

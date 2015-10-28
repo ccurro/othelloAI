@@ -59,6 +59,8 @@ void othelloGame::move(player p) {
 		board->draw(moves,p.symbol);
 		pair<int, list<int>> move = p.selectMove(*board,moves);
 
+		cout << "Move selected is at: " << move.first << endl << endl;;
+
 		board->updatePositions(move,p.symbol);
 	}
 }

@@ -51,7 +51,8 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         bestValue = -bigNo;
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
-            scratchBoard.updatePositions(kv,-symbol);
+            scratchBoard.updatePositions(kv,symbol);
+            // scratchBoard.draw(validMoves,0);
             nodesVisited++;
             int val = alphaBeta(scratchBoard, depth -1, alpha, beta, false, nodesVisited, start);
             bestValue = max(val,bestValue);
@@ -60,12 +61,13 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
                 break;
             }
         } 
+        // exit(-1);
         return bestValue;
     } else {
         bestValue = bigNo;
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
-            scratchBoard.updatePositions(kv,symbol);
+            scratchBoard.updatePositions(kv,-symbol);
             nodesVisited++;
             int val = alphaBeta(scratchBoard, depth -1, alpha, beta, true, nodesVisited, start);
             bestValue = min(val,bestValue);
@@ -76,7 +78,7 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         } 
         return bestValue; // minus sign is in question just added
     }
-    return bestValue;    
+    // return bestValue;    
 }
 
 
@@ -94,23 +96,24 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
             return move;
         }
 
-        if (board.nMoves < 18) {
-            pair<bool,pair<int,list<int>>> bookLookup = openingDatabase.getMove(validMoves, board.pastMoves);
-            if (bookLookup.first) {
-                cout << "Move found in opening database." << endl;
-                return bookLookup.second;
-            } else {
-                cout << "Opening lookup failed, resort to search." << endl;
-            }
-        }
+        // if (board.nMoves < 18) {
+        //     pair<bool,pair<int,list<int>>> bookLookup = openingDatabase.getMove(validMoves, board.pastMoves);
+        //     if (bookLookup.first) {
+        //         cout << "Move found in opening database." << endl;
+        //         return bookLookup.second;
+        //     } else {
+        //         cout << "Opening lookup failed, resort to search." << endl;
+        //     }
+        // }
 
         pair<int, list<int>> tmpmove;
-        int bestVal = -bigNo;
+
         int d;
-        for (d = 1; d < 60 - board.nMoves; d++) {
-        // for (d = 0; d < 1; d++) {        
-            if (60 - board.nMoves + 1 < 12)
-                d = 60 - board.nMoves;
+        for (d = 1; d < 60 - board.nMoves + 1; d++) {
+        // for (d = 7; d < 8; d++) {        
+            int bestVal = -bigNo;            
+            // if (60 - board.nMoves < 12)
+                // d = 60 - board.nMoves - 1;
 
             cout << "Searching at depth " << d << endl;
             int val;
@@ -119,15 +122,18 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
                 othelloBoard scratchBoard = board;
                 scratchBoard.updatePositions(kv,symbol);
                 nodesVisited++;
-                val = alphaBeta(scratchBoard, d, -bigNo, bigNo, true, nodesVisitedTmp, start);
+                val = alphaBeta(scratchBoard, d, -bigNo, bigNo, false, nodesVisitedTmp, start);
                 // cout << "Val at root: " << val << endl;
+                // cout << "Root Move: " << kv.first << endl << endl;
                 if (val > bestVal && val != (numeric_limits<int>::max() -1)) {
                     bestVal = val;
                     tmpmove = kv;
+                    // cout << "Move updated" << endl;
                 } else if (val == bestVal && val != (numeric_limits<int>::max() -1)) {
                     if ((rand() % 100)  > 50) {
                         bestVal = val;
-                        tmpmove = kv; 
+                        tmpmove = kv;
+                        // cout << "Move updated" << endl;
                     }
                 } 
                 else if (val == (numeric_limits<int>::max() -1)) {
@@ -137,6 +143,7 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
             if (val != (numeric_limits<int>::max() -1)) {
                     move = tmpmove;
                     nodesVisited += nodesVisitedTmp;
+                    // cout << "Move updated" << endl;
             } else {
                 break;
             }

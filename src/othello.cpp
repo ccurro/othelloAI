@@ -6,37 +6,37 @@
 #include <assert.h>
 #include "game.h"
 
-pair<vector<int>,vector<int>> getWeightVector(int argc, char *argv[]) {
-    pair<vector <int>,vector<int>> w;
+// pair<vector<int>,vector<int>> getWeightVector(int argc, char *argv[]) {
+//     pair<vector <int>,vector<int>> w;
 
-    for (int i = 1; i < 3; i++) {
-        char * wStr = argv[i];
-        char c = wStr[0];
-        while (c != 0) {
-            if (c != ',') {
-                if (i == 1)
-                    w.first.push_back(c - '0');
-                if (i == 2)
-                    w.second.push_back(c - '0');
-            }
-            c = *wStr++;
-        }
-    }
-    return w;
-}
+//     for (int i = 1; i < 3; i++) {
+//         char * wStr = argv[i];
+//         char c = wStr[0];
+//         while (c != 0) {
+//             if (c != ',') {
+//                 if (i == 1)
+//                     w.first.push_back(c - '0');
+//                 if (i == 2)
+//                     w.second.push_back(c - '0');
+//             }
+//             c = *wStr++;
+//         }
+//     }
+//     return w;
+// }
 
 int main (int argc, char *argv[]) {
     othelloBoard board;
 
-    pair<vector <int>,vector<int>>  w = getWeightVector(argc, argv);
+    // pair<vector <int>,vector<int>>  w = getWeightVector(argc, argv);
 
     int choice;
     cout << "Load a game or start a new one?\n";
     cout << "1 -> Load a saved board state\n";
     cout << "2 -> Start a new game\n";
     cout << "Selection: ";
-    // cin >> choice;
-    choice = 2;
+    cin >> choice;
+    // choice = 2;
 
     othelloGame game (&board, false, false);
 
@@ -44,14 +44,16 @@ int main (int argc, char *argv[]) {
         game.newGame = false;
 
     heuristicEvaluation h1;
-    h1.weights = w.first;
+    // h1.hIndex = (*argv[1] - '0');
+    h1.hIndex = 5;
 
     heuristicEvaluation h2;
-    h2.weights = w.second;
+    // h2.hIndex = (*argv[2] - '0');
+    h2.hIndex = 4;
 
     // humanPlayer, playerId, n, symbol 
     player playerOne (false, 1, board.n,-1, h1); // black
-    player playerTwo (false, 0, board.n,1, h2);  // white
+    player playerTwo (true, 0, board.n,1, h2);  // white
 
 
     if (game.newGame) {

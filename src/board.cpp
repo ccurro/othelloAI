@@ -69,14 +69,12 @@ void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, 
     for (int j = inc; (i + j < n) && (i + j > -1); j+=inc) {
         // first check to make sure don't wrap around board
         // check to see that diff in cols and rows doesn't exceed 1
-        // only do after first loop
-        if (j != i) {
-            int crow, ccol, prow, pcol;
-            ind2sub(i+j-inc, width, height, &prow, &pcol);
-            ind2sub(i+j,     width, height, &crow, &ccol);
-            if (abs(crow - prow) > 1 || abs(ccol - pcol) > 1 )
-                break;
-        }
+        int crow, ccol, prow, pcol;
+        ind2sub(i+j-inc, width, height, &prow, &pcol);
+        ind2sub(i+j,     width, height, &crow, &ccol);
+        if (abs(crow - prow) > 1 || abs(ccol - pcol) > 1)
+            break;
+
         int pos = positions[i+j];
         if (pos == clr)
             break;
