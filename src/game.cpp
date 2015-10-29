@@ -8,6 +8,12 @@
 
 using namespace std;
 
+void ind2subg(const int sub,const int cols,const int rows,int *row,int *col) {
+   *row=sub/cols;
+   *col=sub%cols;
+}
+
+
 othelloGame::othelloGame(othelloBoard* a, bool b, bool c) {
 	board = a; 
 	humanPlayer = b;
@@ -31,7 +37,14 @@ void othelloGame::loadGame(string gameFileName) {
 	vector<int> pos(board->n,0);
 	ifstream gameFile;
 	string line;
-	gameFile.open(gameFileName);
+
+	try {
+		gameFile.open(gameFileName);
+	}
+	catch (std::ios_base::failure& e) {
+		cerr << e.what() << '\n';
+	}
+
 	int ind = 0;
 	while (getline(gameFile,line)) {
 		for (int i = 0; i < 16; i+=2) {
@@ -59,7 +72,11 @@ void othelloGame::move(player p) {
 		board->draw(moves,p.symbol);
 		pair<int, list<int>> move = p.selectMove(*board,moves);
 
-		cout << "Move selected is at: " << move.first << endl << endl;;
+		char alpha[9] = "ABCDEFGH";
+	    char nums[9]  = "12345678";
+    	int row, col;
+		ind2subg(move.first, 8, 8, &row, &col);
+        cout << "Move selected is at: " << alpha[col] << nums[row] << endl << endl;
 
 		board->updatePositions(move,p.symbol);
 	}

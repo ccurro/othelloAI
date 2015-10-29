@@ -14,9 +14,6 @@ othelloBoard::othelloBoard() {
 
 // 1 is black, -1 is white
 void othelloBoard::draw(unordered_map<int, list<int>> moves, int symbol) {
-    if (&positions) {
-        fprintf(stderr,"%x\n",&positions);
-    }
     cout << "  A B C D E F G H\n";
     int r = 0;
     for (int i = 0; i < n; i+=height ) {

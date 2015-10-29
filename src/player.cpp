@@ -8,6 +8,7 @@
 #include <ratio>
 #include <chrono>
 #include "player.h"
+#include "sstream"
 
 using namespace std;
 
@@ -111,9 +112,12 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
         int d;
         for (d = 1; d < 60 - board.nMoves + 1; d++) {
         // for (d = 7; d < 8; d++) {        
-            int bestVal = -bigNo;            
-            // if (60 - board.nMoves < 12)
-                // d = 60 - board.nMoves - 1;
+            int bestVal = -bigNo;        
+            // bool fullSearch = false;    
+            // if (60 - board.nMoves < 12) {
+            //     d = 60 - board.nMoves + 1;
+            //     fullSearch = true;
+            // }
 
             cout << "Searching at depth " << d << endl;
             int val;
@@ -165,15 +169,32 @@ pair<int, list<int>> player::interactiveMove(unordered_map<int, list<int>> valid
         int ind;
         //interactive selection from list.
 
-        cout << "Pick Move: ";
-        cin >> ind;
+        bool validSelection = false;
 
-        int i;
+        do {
+            cout << "Pick Move: ";
+
+            std::string str;
+            cin >> str;
+            std::istringstream iss(str);
+            iss >> ind;
+
+            if (iss.eof() == false) {
+                cout << "Non-integer input, please try again." << endl;
+            } else if(ind > validMoves.size() || ind < 0) {
+                cout << "Integer selection out of range, please try again" << endl;
+            } else {
+                validSelection = true;
+            }
+        } while (!validSelection);
+
+        int i = 0;
         for (auto kv : validMoves) {
             move = kv;
             i++;
-            if (i == ind)
+            if (i == ind) {
                 break;
+            }
         }
 
         return move;

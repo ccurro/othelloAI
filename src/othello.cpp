@@ -4,6 +4,7 @@
 #include <vector>
 #include <limits.h>
 #include <assert.h>
+#include <sstream>
 #include "game.h"
 
 // pair<vector<int>,vector<int>> getWeightVector(int argc, char *argv[]) {
@@ -34,9 +35,27 @@ int main (int argc, char *argv[]) {
     cout << "Load a game or start a new one?\n";
     cout << "1 -> Load a saved board state\n";
     cout << "2 -> Start a new game\n";
-    cout << "Selection: ";
-    cin >> choice;
     // choice = 2;
+
+    bool validSelection = false;
+
+    do {
+        cout << "Selection: ";
+
+        std::string str;
+        cin >> str;
+        std::istringstream iss(str);
+        iss >> choice;
+
+        if (iss.eof() == false) {
+            cout << "Non-integer input, please try again." << endl;
+        } else if(choice > 2 || choice < 0) {
+            cout << "Integer selection out of range, please try again" << endl;
+        } else {
+            validSelection = true;
+        }
+    } while (!validSelection);
+
 
     othelloGame game (&board, false, false);
 
@@ -49,11 +68,11 @@ int main (int argc, char *argv[]) {
 
     heuristicEvaluation h2;
     // h2.hIndex = (*argv[2] - '0');
-    h2.hIndex = 4;
+    h2.hIndex = 5;
 
     // humanPlayer, playerId, n, symbol 
-    player playerOne (false, 1, board.n,-1, h1); // black
-    player playerTwo (true, 0, board.n,1, h2);  // white
+    player playerOne (false, 1, board.n,-1, h2); // black
+    player playerTwo (true, 0, board.n,1, h1);  // white
 
 
     if (game.newGame) {
