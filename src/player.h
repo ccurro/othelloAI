@@ -8,7 +8,7 @@ class player {
     bool humanPlayer;
 
     int n;
-    float limit = 5;
+
     openings openingDatabase;
     heuristicEvaluation heuristic;
     int alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start);
@@ -18,6 +18,7 @@ class player {
     pair<int, list<int>>  interactiveMove(unordered_map<int, list<int>> validMoves);
 
 public:
+    float limit = 5;
     int symbol;
     int playerId;
     player(bool a, bool b, int c, int d, heuristicEvaluation e);

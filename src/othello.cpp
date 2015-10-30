@@ -26,6 +26,64 @@ pair<vector<int>,vector<int>> getWeightVector(int argc, char *argv[]) {
     return w;
 }
 
+float getTimeLimit() {
+    float limit;
+    bool validSelection = false;
+    do {
+        cout << "Pick time limit for computer: (seconds) ";        
+
+        std::string str;
+        cin >> str;
+        std::istringstream iss(str);
+        iss >> limit;
+
+        if (iss.eof() == false) {
+            cout << "Non-numeric input, please try again." << endl;
+        } else if(limit < 0) {
+            cout << "Negative numeric input, please try a positive number" << endl;
+        } else {
+            validSelection = true;
+        }
+    } while (!validSelection);
+
+    return limit;
+}
+
+bool checkCPU(int id) {
+    bool cpu;
+    char c;
+    bool validSelection = false;
+    do {
+        cout << "Is Player " << id << " a computer? y/n ";      
+
+        std::string str;
+        cin >> str;
+        std::istringstream iss(str);
+        iss >> c;
+
+        cout << c << endl;
+
+        iss.ignore(numeric_limits <streamsize> ::max(), '\n' );
+
+        if (iss.eof() == false) {
+            cout << "Non-single character input, please try again." << endl;
+        } else 
+        if(c != 'y' && c != 'n') {
+            cout << "Did not enter 'y' or 'n'. Please try again." << endl;
+        } else {
+            validSelection = true;
+        }
+    } while (!validSelection);
+
+    if (c == 'y') {
+        cpu = true;
+    } else {
+        cpu = false;
+    }
+
+    return cpu;
+}
+
 int main (int argc, char *argv[]) {
     othelloBoard board;
 
@@ -56,6 +114,14 @@ int main (int argc, char *argv[]) {
         }
     } while (!validSelection);
 
+    bool cpu1 = checkCPU(1);
+    bool cpu2 = checkCPU(2);
+
+    float limit;
+    if (cpu1 || cpu2) {
+        limit = getTimeLimit();
+    }
+
 
     othelloGame game (&board, false, false);
 
@@ -73,8 +139,13 @@ int main (int argc, char *argv[]) {
     h2.hIndex = 5;
 
     // humanPlayer, playerId, n, symbol 
-    player playerOne (false, 1, board.n,-1, h2); // black
-    player playerTwo (true, 0, board.n,1, h1);  // white
+    player playerOne (!cpu1, 1, board.n,-1, h2); // black
+    player playerTwo (!cpu2, 0, board.n,1, h1);  // white
+
+    if (cpu1 || cpu2) {
+        playerOne.limit = limit;
+        playerTwo.limit = limit;
+    }
 
 
     if (game.newGame) {
