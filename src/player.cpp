@@ -37,15 +37,26 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
     } else {
         validMoves = board.validMoves(-symbol);
     }
-    
-    // if (depth < 1 || validMoves.begin() == validMoves.end()) {
-    if (depth < 1 || validMoves.begin() == validMoves.end()) {        
+
+    if (depth < 1) {        
+    // if (depth < 1 || validMoves.begin() == validMoves.end()) {        
         // call heuristic - in this case most piece
-        // cout << "called" << endl;
         bestValue = heuristic.heuristic(board,60 - board.nMoves,symbol);
         if (symbol == -1)
             bestValue = -1*bestValue;
         return bestValue;
+    }
+
+    if (validMoves.begin() == validMoves.end()) {
+        unordered_map<int, list<int>> otherValidMoves;
+        if (!maximizingPlayer) {
+            otherValidMoves = board.validMoves(symbol);
+        } else {
+            otherValidMoves = board.validMoves(-symbol);
+        }
+        if (otherValidMoves.begin() == otherValidMoves.end()) {
+            return alphaBeta(board, depth -1, alpha, beta, !maximizingPlayer, nodesVisited, start);
+        }
     }
 
     if (maximizingPlayer) {
@@ -118,7 +129,7 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
             //     d = 60 - board.nMoves + 1;
             //     fullSearch = true;
             // }
-
+            cout << "Spaces remaining on the board: " << 60 - board.nMoves << endl;
             cout << "Searching at depth " << d << endl;
             int val;
             int nodesVisitedTmp = nodesVisited;

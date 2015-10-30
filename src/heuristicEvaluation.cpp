@@ -242,11 +242,11 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 		if ((otherValidMoves.begin() == otherValidMoves.end()) || (nSpacesRemaining == 0)) {
 			int s = accumulate(board.positions.begin(), board.positions.end(), 0);
 			if (s > 0) {
-                	// cout << "White wins!" << endl;
+                	cout << "White wins!" << endl;
 				return 45678900 + s;
 			}
 			if (s < 0) {
-                	// cout << "Black wins!" << endl;
+                	cout << "Black wins!" << endl;
 				return -45678900 + s;
 			}
 		}
@@ -319,7 +319,9 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 	// cout << "S" << endl;
 	// cout << mobility << endl;
 	// cout << potMobility << endl;
+	// cout << parity << endl;
 	// cout << corners << endl;
+	// cout << stability << endl;
 
 	// board.draw(validMoves,1);
 

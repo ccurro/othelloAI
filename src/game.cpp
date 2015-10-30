@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <algorithm>
+#include <numeric>
 #include <assert.h>
 #include "game.h"
 
@@ -58,6 +59,7 @@ void othelloGame::loadGame(string gameFileName) {
 			ind++;
 		}
 	}
+	board->nMoves = inner_product(pos.begin(),pos.end(),pos.begin(),0);
 	board->positions.swap(pos);
 	gameFile.close();
 }
