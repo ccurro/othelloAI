@@ -7,29 +7,29 @@
 #include <sstream>
 #include "game.h"
 
-// pair<vector<int>,vector<int>> getWeightVector(int argc, char *argv[]) {
-//     pair<vector <int>,vector<int>> w;
+pair<vector<int>,vector<int>> getWeightVector(int argc, char *argv[]) {
+    pair<vector <int>,vector<int>> w;
 
-//     for (int i = 1; i < 3; i++) {
-//         char * wStr = argv[i];
-//         char c = wStr[0];
-//         while (c != 0) {
-//             if (c != ',') {
-//                 if (i == 1)
-//                     w.first.push_back(c - '0');
-//                 if (i == 2)
-//                     w.second.push_back(c - '0');
-//             }
-//             c = *wStr++;
-//         }
-//     }
-//     return w;
-// }
+    for (int i = 1; i < 3; i++) {
+        char * wStr = argv[i];
+        char c = wStr[0];
+        while (c != 0) {
+            if (c != ',') {
+                if (i == 1)
+                    w.first.push_back(c - '0');
+                if (i == 2)
+                    w.second.push_back(c - '0');
+            }
+            c = *wStr++;
+        }
+    }
+    return w;
+}
 
 int main (int argc, char *argv[]) {
     othelloBoard board;
 
-    // pair<vector <int>,vector<int>>  w = getWeightVector(argc, argv);
+    pair<vector <int>,vector<int>>  w = getWeightVector(argc, argv);
 
     int choice;
     cout << "Load a game or start a new one?\n";
@@ -64,10 +64,12 @@ int main (int argc, char *argv[]) {
 
     heuristicEvaluation h1;
     // h1.hIndex = (*argv[1] - '0');
+    h1.w = w.first;
     h1.hIndex = 5;
 
     heuristicEvaluation h2;
     // h2.hIndex = (*argv[2] - '0');
+    h2.w = w.second;
     h2.hIndex = 5;
 
     // humanPlayer, playerId, n, symbol 

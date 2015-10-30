@@ -5,7 +5,7 @@ void ind2sub(const int sub,const int cols,const int rows,int *row,int *col) {
    *col=sub%cols;
 }
 
-int stableDiscsHelper(vector <int> positions, int corner, int symbol) {
+int stableDiscsHelper(vector <int> positions, unordered_set<int> & sDiscs, int corner, int symbol) {
 	// only run on filled corners of symbol
 	int nStableDiscs = 0;
 	bool down, left;
@@ -26,47 +26,80 @@ int stableDiscsHelper(vector <int> positions, int corner, int symbol) {
 	int horEnd, verEnd;
 	if (down) {
 		verInc = 8;
-		verEnd = 24;
+		verEnd = 56;
 	} else {
 		verInc = -8;
-		verEnd = -24;
+		verEnd = -56;
 	}
 	if (left) {
 		horInc = -1;
-		horEnd = -4;
+		horEnd = -7;
 	} else {
 		horInc = 1;
-		horEnd = 4;
+		horEnd = 7;
 	}
 
 	for (int i = corner; i != corner + verEnd + verInc; i+=verInc) {
-		// cout << " " << endl;
 		if(positions[i] == symbol) {
 			for (int j = i; j != i + horEnd; j+= horInc) {
 				if (positions[j] == symbol) {
-					// cout << j << endl;
-					nStableDiscs++;
+					if (sDiscs.find(j) == sDiscs.end()) {
+						sDiscs.insert(j);
+					}
 				} else {
 					break;
 				}
+			}
+		} else if(positions[i] == -symbol) {
+			if (positions[i+horEnd] == -symbol) {
+				bool allIntStable = true;
+				for (int j = i + horInc; j != i + horEnd; j+= horInc) {
+					if (positions[j] == symbol) {
+						;
+					} else {
+						allIntStable = false;
+					}
+				}
+				if (allIntStable) {
+					for (int j = i + horInc; j != i + horEnd; j+= horInc) {
+						sDiscs.insert(j);
+					}
+				}
+			} else {
+				break;
+			} 
+			if (positions[i+verEnd] == -symbol) {
+				bool allIntStable = true;
+				for (int j = i + verInc; j != i + verEnd; j+= verInc) {
+					if (positions[j] == symbol) {
+						;
+					} else {
+						allIntStable = false;
+					}
+				}
+				if (allIntStable) {
+					for (int j = i + verInc; j != i + verEnd; j+= verInc) {
+						sDiscs.insert(j);
+					}
+				}
+			} else {
+				break;
 			}
 		} else {
 			break;
 		}
 	}
-
-	return nStableDiscs;
 }
 
 int stableDiscs(vector <int> positions,int symbol) {
 	// grow out from for corners
-	int nStableDiscs = 0;
-	nStableDiscs += stableDiscsHelper(positions,63,symbol);
-	nStableDiscs += stableDiscsHelper(positions,7,symbol);
-	nStableDiscs += stableDiscsHelper(positions,0,symbol);
-	nStableDiscs +=	stableDiscsHelper(positions,56,symbol);
+	unordered_set<int> sDiscs;
+	stableDiscsHelper(positions,sDiscs,63,symbol);
+	stableDiscsHelper(positions,sDiscs,7,symbol);
+	stableDiscsHelper(positions,sDiscs,0,symbol);
+	stableDiscsHelper(positions,sDiscs,56,symbol);
 
-	return nStableDiscs;
+	return sDiscs.size();
 }
 
 
@@ -196,7 +229,7 @@ int heuristic4(othelloBoard board, int nSpacesRemaining,int symbol) {
 	return rand() % 1000;
 }
 
-int heuristic5(othelloBoard board, int nSpacesRemaining,int symbol) {
+int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int symbol) {
     // do heuristic from perspective of player with p.symbol = 1
 	int val = 0;
 	vector <int> positions = board.positions;
@@ -290,7 +323,7 @@ int heuristic5(othelloBoard board, int nSpacesRemaining,int symbol) {
 
 	// board.draw(validMoves,1);
 
-	return round(50*mobility + 10*potMobility + 10*PAI(board.nMoves)*parity + 80*corners + 0*stability);
+	return round(w[0]*mobility + w[1]*potMobility + w[2]*PAI(board.nMoves)*parity + w[3]*corners + w[4]*stability);
 }
 
 
