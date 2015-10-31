@@ -78,7 +78,7 @@ void othelloGame::move(player p) {
 	    char nums[9]  = "12345678";
     	int row, col;
 		ind2subg(move.first, 8, 8, &row, &col);
-        cout << "Move selected is at: " << alpha[col] << nums[row] << endl << endl;
+        cout << "Move selected is at: " << alpha[col] << nums[row] << ',' << move.first << endl << endl;
 
 		board->updatePositions(move,p.symbol);
 	}

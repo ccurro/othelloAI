@@ -87,7 +87,7 @@ bool checkCPU(int id) {
 int main (int argc, char *argv[]) {
     othelloBoard board;
 
-    pair<vector <int>,vector<int>>  w = getWeightVector(argc, argv);
+    pair<vector <int>,vector<int>>  w; //= getWeightVector(argc, argv);
 
     int choice;
     cout << "Load a game or start a new one?\n";
@@ -136,11 +136,11 @@ int main (int argc, char *argv[]) {
     heuristicEvaluation h2;
     // h2.hIndex = (*argv[2] - '0');
     h2.w = w.second;
-    h2.hIndex = 5;
+    h2.hIndex = 4; // 4 -> random
 
     // humanPlayer, playerId, n, symbol 
-    player playerOne (!cpu1, 1, board.n,-1, h2); // black
-    player playerTwo (!cpu2, 0, board.n,1, h1);  // white
+    player playerOne (!cpu1, 1, board.n,-1, h1); // black
+    player playerTwo (!cpu2, 0, board.n,1,  h2);  // white
 
     if (cpu1 || cpu2) {
         playerOne.limit = limit;
