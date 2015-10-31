@@ -26,7 +26,7 @@ chrono::duration<double> toc(chrono::time_point<std::chrono::system_clock> start
 
 int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start) {
     chrono::duration<double> elapsed_seconds = toc(start);
-    if (elapsed_seconds.count() > 0.99*limit) {
+    if (elapsed_seconds.count() > 0.999*limit) {
         if (!maximizingPlayer) {
             return numeric_limits<int>::max() -1;
         } else if(maximizingPlayer) {
@@ -38,10 +38,10 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
     int bestValue;
     int currSymbol;
     if (maximizingPlayer) {
-        validMoves = board.validMoves(symbol);
+        board.validMoves(validMoves,symbol);
         currSymbol = symbol;
     } else {
-        validMoves = board.validMoves(-symbol);
+        board.validMoves(validMoves,-symbol);
         currSymbol = -symbol;
     }
 
@@ -57,9 +57,9 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
     if (validMoves.size() == 0) {
         unordered_map<int, list<int>> otherValidMoves;
         if (!maximizingPlayer) {
-            otherValidMoves = board.validMoves(symbol);
+            board.validMoves(otherValidMoves,symbol);
         } else {
-            otherValidMoves = board.validMoves(-symbol);
+            board.validMoves(otherValidMoves,-symbol);
         }
         if (otherValidMoves.size() > 0) {
             return alphaBeta(board, depth -1, alpha, beta, !maximizingPlayer, nodesVisited, start);
@@ -73,12 +73,13 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
 
     if (maximizingPlayer) {
         bestValue = -bigNo;
+        int val;
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
             scratchBoard.updatePositions(kv,symbol);
             // scratchBoard.draw(validMoves,0);
             nodesVisited++;
-            int val = alphaBeta(scratchBoard, depth -1, alpha, beta, false, nodesVisited, start);
+            val = alphaBeta(scratchBoard, depth -1, alpha, beta, false, nodesVisited, start);
             bestValue = max(val,bestValue);
             alpha = max(alpha,bestValue);
             if (beta <= alpha) {
@@ -89,11 +90,12 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         return bestValue;
     } else {
         bestValue = bigNo;
+        int val;
         for (auto kv : validMoves) {
             othelloBoard scratchBoard = board;
             scratchBoard.updatePositions(kv,-symbol);
             nodesVisited++;
-            int val = alphaBeta(scratchBoard, depth -1, alpha, beta, true, nodesVisited, start);         
+            val = alphaBeta(scratchBoard, depth -1, alpha, beta, true, nodesVisited, start);         
             bestValue = min(val,bestValue);
             beta = min(beta,bestValue);
             if (beta <= alpha) {

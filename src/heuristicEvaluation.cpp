@@ -234,8 +234,10 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 	int val = 0;
 	vector <int> positions = board.positions;
 
-	unordered_map<int, list<int>> validMoves = board.validMoves(1);
-	unordered_map<int, list<int>> otherValidMoves = board.validMoves(-1);
+	unordered_map<int, list<int>> validMoves;
+	board.validMoves(validMoves,1);
+	unordered_map<int, list<int>> otherValidMoves;
+	board.validMoves(otherValidMoves,-1);
 
     //check if game is over		
 	if ((validMoves.size() == 0) || (nSpacesRemaining == 0)) {   

@@ -61,18 +61,22 @@ void othelloBoard::ind2sub(const int sub,const int cols,const int rows,int *row,
    *col=sub%cols;
 }
 
-void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, list<int>> & pieces) {
+void othelloBoard::validMovesHelper(const int & clr, const int & i, const int & inc, unordered_map<int, list<int>> & pieces, list <int> & oldcandidates, pair<int,list<int>> & move) {
     list<int> candidates;
+    // list <int> oldcandidates;
+    int crow, ccol, prow, pcol;
+    int pos;
+    // pair<int,list<int>> move;
+
     for (int j = inc; (i + j < n) && (i + j > -1); j+=inc) {
         // first check to make sure don't wrap around board
         // check to see that diff in cols and rows doesn't exceed 1
-        int crow, ccol, prow, pcol;
         ind2sub(i+j-inc, width, height, &prow, &pcol);
         ind2sub(i+j,     width, height, &crow, &ccol);
         if (abs(crow - prow) > 1 || abs(ccol - pcol) > 1)
             break;
 
-        int pos = positions[i+j];
+        pos = positions[i+j];
         if (pos == clr)
             break;
         if (pos == -clr) {
@@ -83,40 +87,47 @@ void othelloBoard::validMovesHelper(int clr, int i, int inc, unordered_map<int, 
             break;
         if (pos == 0 && positions[i+j-inc] == -clr) { 
             if (pieces.find(i+j) != pieces.end()) {
-                list <int> oldcandidates = pieces[i+j];
+                oldcandidates = pieces[i+j];
                 oldcandidates.splice(oldcandidates.begin(),candidates);
                 pieces.erase(i+j);
-                pieces.insert(pair<int,list<int>> (i+j,oldcandidates));
+                move.first = i+j;
+                move.second = oldcandidates;
+                pieces.insert(move);
+                // pieces.insert(pair<int,list<int>> (i+j,oldcandidates));
             } else {
-                pieces.insert(pair<int,list<int>> (i+j,candidates));
+                move.first = i+j;
+                move.second = oldcandidates;
+                pieces.insert(move);
+                // pieces.insert(pair<int,list<int>> (i+j,candidates));
             }
             break;
         }
     }
 }
 
- unordered_map<int, list<int>> othelloBoard::validMoves (int symbol) {
-    unordered_map<int, list<int>> moves;
+void othelloBoard::validMoves (unordered_map<int, list<int>> & moves, int symbol) {
+    int incs[8] = {8,-8,1,-1,-7,7,-9,9};
+    list <int> oldcandidates;
+    pair<int,list<int>> move;
     for (int i = 0; i < n; i+=1) {
             if (positions[i] == 0)
                 continue;
             if (positions[i] == symbol) {
                 // go through columns
-                validMovesHelper(symbol, i,  8, moves);
-                validMovesHelper(symbol, i, -8, moves);
+                validMovesHelper(symbol, i, incs[0], moves, oldcandidates, move);
+                validMovesHelper(symbol, i, incs[1], moves, oldcandidates, move);
                 // go through rows
-                validMovesHelper(symbol, i,  1, moves);
-                validMovesHelper(symbol, i, -1, moves);
+                validMovesHelper(symbol, i, incs[2], moves, oldcandidates, move);
+                validMovesHelper(symbol, i, incs[3], moves, oldcandidates, move);
                 // go through diagnols
-                validMovesHelper(symbol, i, -7, moves);
-                validMovesHelper(symbol, i,  7, moves);
-                validMovesHelper(symbol, i, -9, moves);
-                validMovesHelper(symbol, i,  9, moves);
+                validMovesHelper(symbol, i, incs[4], moves, oldcandidates, move);
+                validMovesHelper(symbol, i, incs[5], moves, oldcandidates, move);
+                validMovesHelper(symbol, i, incs[6], moves, oldcandidates, move);
+                validMovesHelper(symbol, i, incs[7], moves, oldcandidates, move);
             }
             if (positions[i] == -symbol)
                 continue;
         }
-    return moves;
 }
 
 void othelloBoard::updatePositions (pair<int, list<int>> move, int symbol) {

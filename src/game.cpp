@@ -66,7 +66,8 @@ void othelloGame::loadGame(string gameFileName) {
 
 
 void othelloGame::move(player p) {
-	unordered_map<int, list<int>> moves = board->validMoves(p.symbol);
+	unordered_map<int, list<int>> moves;
+	board->validMoves(moves,p.symbol);
 	if (moves.empty()) {
 		passes[p.playerId] = 1;
 	} else {
