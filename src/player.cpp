@@ -134,6 +134,11 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
 
         pair<int, list<int>> tmpmove;
 
+        // list<unordered_map<int,int>> moveOrder;
+        // for (auto kv : validMoves) {
+        //     moveOrder.front().insert(make_pair(1,kv.first));
+        // }
+
         int d;
         for (d = 1; d < 60 - board.nMoves + 1; d++) {
         // for (d = 7; d < 8; d++) {        
@@ -148,6 +153,8 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
             int val;
             int nodesVisitedTmp = nodesVisited;
             for (auto kv : validMoves) {
+            // for (auto order : moveOrder) {
+                // pair<int,list<int>> kv = *validMoves.find(order[1]);
                 othelloBoard scratchBoard = board;
                 scratchBoard.updatePositions(kv,symbol);
                 nodesVisited++;

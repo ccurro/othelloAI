@@ -96,7 +96,7 @@ void othelloBoard::validMovesHelper(const int & clr, const int & i, const int & 
                 // pieces.insert(pair<int,list<int>> (i+j,oldcandidates));
             } else {
                 move.first = i+j;
-                move.second = oldcandidates;
+                move.second = candidates;
                 pieces.insert(move);
                 // pieces.insert(pair<int,list<int>> (i+j,candidates));
             }

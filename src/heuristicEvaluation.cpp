@@ -403,7 +403,7 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 	// return round(w[0]*mobility + w[1]*potMobility + w[2]*PAI(board.nMoves)*parity + w[3]*corners + w[4]*stability + w[5]*pivots);
 	// return round(2*mobility + 1*potMobility + 1*PAI(board.nMoves)*parity + 1000000*corners + 3*stability + 10*pivots);
 	// return corners;
-	return 5*mobility + 2*potMobility + parity + naivety + 1000*corners + 10*stability;
+	return 5*mobility + 2*potMobility + parity + naivety + 1000*corners + 1000*stability;
 }
 
 
