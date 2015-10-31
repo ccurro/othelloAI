@@ -238,8 +238,8 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 	unordered_map<int, list<int>> otherValidMoves = board.validMoves(-1);
 
     //check if game is over		
-	if ((validMoves.begin() == validMoves.end()) || (nSpacesRemaining == 0)) {   
-		if ((otherValidMoves.begin() == otherValidMoves.end()) || (nSpacesRemaining == 0)) {
+	if ((validMoves.size() == 0) || (nSpacesRemaining == 0)) {   
+		if ((otherValidMoves.size() == 0) || (nSpacesRemaining == 0)) {
 			int s = accumulate(board.positions.begin(), board.positions.end(), 0);
 			if (s > 0) {
                 	// cout << "White wins!" << endl;

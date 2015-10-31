@@ -54,14 +54,14 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
         return bestValue;
     }
 
-    if (validMoves.begin() == validMoves.end()) {
+    if (validMoves.size() == 0) {
         unordered_map<int, list<int>> otherValidMoves;
         if (!maximizingPlayer) {
             otherValidMoves = board.validMoves(symbol);
         } else {
             otherValidMoves = board.validMoves(-symbol);
         }
-        if (otherValidMoves.begin() != otherValidMoves.end()) {
+        if (otherValidMoves.size() > 0) {
             return alphaBeta(board, depth -1, alpha, beta, !maximizingPlayer, nodesVisited, start);
         } else {
             bestValue = heuristic.heuristic(board,60 - board.nMoves,currSymbol);
@@ -80,16 +80,10 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
             nodesVisited++;
             int val = alphaBeta(scratchBoard, depth -1, alpha, beta, false, nodesVisited, start);
             bestValue = max(val,bestValue);
-             // if (val < bestValue) {
-                // if (bestValue == -bigNo) {
-                    // cout << "Oh fuck" << endl;
-                    // cout << val << endl;
-                // }
-            // }
-            // alpha = max(alpha,bestValue);
-            // if (beta <= alpha) {
-                // break;
-            // }
+            alpha = max(alpha,bestValue);
+            if (beta <= alpha) {
+                break;
+            }
         } 
         // exit(-1);
         return bestValue;
@@ -99,19 +93,14 @@ int player::alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool m
             othelloBoard scratchBoard = board;
             scratchBoard.updatePositions(kv,-symbol);
             nodesVisited++;
-            int val = alphaBeta(scratchBoard, depth -1, alpha, beta, true, nodesVisited, start);
-            if (val > bestValue) {
-                if (bestValue == bigNo) {
-                    cout << val << endl;
-                }
-            }           
+            int val = alphaBeta(scratchBoard, depth -1, alpha, beta, true, nodesVisited, start);         
             bestValue = min(val,bestValue);
-            // beta = min(beta,bestValue);
-            // if (beta <= alpha) {
-                // break;
-            // }
+            beta = min(beta,bestValue);
+            if (beta <= alpha) {
+                break;
+            }
         } 
-        return bestValue; // minus sign is in question just added
+        return bestValue;
     }
     // return bestValue;    
 }
@@ -162,17 +151,13 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
                 nodesVisited++;
                 val = alphaBeta(scratchBoard, d, -bigNo, bigNo, false, nodesVisitedTmp, start);
                 cout << kv.first << ":" << val << " ";
-                // cout << "Val at root: " << val << endl;
-                // cout << "Root Move: " << kv.first << endl << endl;
                 if (val > bestVal && val != (numeric_limits<int>::max() -1) && val != (numeric_limits<int>::min() -1)) {
                     bestVal = val;
                     tmpmove = kv;
-                    // cout << "Move updated" << endl;
                 } else if (val == bestVal && val != (numeric_limits<int>::max() -1) && val != (numeric_limits<int>::min() -1)) {
                     if ((rand() % 100)  > 50) {
                         bestVal = val;
                         tmpmove = kv;
-                        // cout << "Move updated" << endl;
                     }
                 } 
                 else if (val == (numeric_limits<int>::max() -1) || val == (numeric_limits<int>::min() +1)) {
@@ -183,19 +168,15 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
             if (val != (numeric_limits<int>::max() -1) && val != (numeric_limits<int>::min() +1)) {
                     move = tmpmove;
                     nodesVisited += nodesVisitedTmp;
-                    // cout << "Move updated" << endl;
             } else {
                 break;
             }
-            // cout << "best val: " << bestVal << endl;
         }
 
         chrono::duration<double> elapsed_seconds = toc(start);
         cout << "\nCompleted search to depth " << d-1 << endl;
         cout << "\nNodes visited: " << nodesVisited << endl; 
         cout << "Time to move: " << elapsed_seconds.count() << " seconds" << endl << endl;
-
-        // exit(-1);
 
         return move;
     }
