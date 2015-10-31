@@ -115,7 +115,7 @@ pair<int,pair<int,list<int>>> player::alphaBeta(othelloBoard board, int maxDepth
                 break;
             }
         } 
-        moveOrder[maxDepth - depth] = scoreMove.first;
+        moveOrder[maxDepth - depth] = scoreMove.second.first;
         return scoreMove;
     } else {
         scoreMove.first = bigNo;
@@ -149,7 +149,7 @@ pair<int,pair<int,list<int>>> player::alphaBeta(othelloBoard board, int maxDepth
                 break;
             }
         }
-        moveOrder[maxDepth - depth] = scoreMove.first;
+        moveOrder[maxDepth - depth] = scoreMove.second.first;
         return scoreMove;
     }
 }
