@@ -2,17 +2,15 @@
 #include <vector>
 #include <unordered_map>
 #include <list>
-// #include "player.h"
 #include "board.h"
 
 using namespace std;
 
 othelloBoard::othelloBoard() {
     positions.assign(64,0);
-    // positions[1] = 1;
 }
 
-// 1 is black, -1 is white
+// -1 is black, 1 is white
 void othelloBoard::draw(unordered_map<int, list<int>> moves, int symbol) {
     cout << "  A B C D E F G H\n";
     int r = 0;
@@ -63,10 +61,8 @@ void othelloBoard::ind2sub(const int sub,const int cols,const int rows,int *row,
 
 void othelloBoard::validMovesHelper(const int & clr, const int & i, const int & inc, unordered_map<int, list<int>> & pieces, list <int> & oldcandidates, pair<int,list<int>> & move) {
     list<int> candidates;
-    // list <int> oldcandidates;
     int crow, ccol, prow, pcol;
     int pos;
-    // pair<int,list<int>> move;
 
     for (int j = inc; (i + j < n) && (i + j > -1); j+=inc) {
         // first check to make sure don't wrap around board
@@ -93,12 +89,10 @@ void othelloBoard::validMovesHelper(const int & clr, const int & i, const int & 
                 move.first = i+j;
                 move.second = oldcandidates;
                 pieces.insert(move);
-                // pieces.insert(pair<int,list<int>> (i+j,oldcandidates));
             } else {
                 move.first = i+j;
                 move.second = candidates;
                 pieces.insert(move);
-                // pieces.insert(pair<int,list<int>> (i+j,candidates));
             }
             break;
         }

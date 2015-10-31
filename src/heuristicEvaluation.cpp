@@ -259,7 +259,7 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 	int	p = validMoves.size();
 	int	o = otherValidMoves.size();
 
-	double mobility;
+	int mobility;
 	if (p > o) {
 		mobility = (100*p)/(p+o);
 	} else if (p < o) {
@@ -271,7 +271,7 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 	int pPotMob = potentialMobility(positions, 1);
 	int oPotMob = potentialMobility(positions, -1);
 
-	double potMobility;
+	int potMobility;
 	if (pPotMob > oPotMob) {
 		potMobility = (100*pPotMob)/(pPotMob+oPotMob);
 	} else if (pPotMob < oPotMob) {
@@ -280,56 +280,8 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 		potMobility = 0;
 	}
 
-	vector <int> boardWeights = {
-        	 100,-100, 100,  50,  50, 100,-100, 100,
-        	-100,-200, -50, -50, -50, -50,-200,-100,
-        	 100, -50, 100,   0,   0, 100, -50, 100,
-        	  50, -50,  0,    0,   0,   0, -50,  50,
-        	  50, -50,  0,    0,   0,   0, -50,  50,
-        	 100, -50, 100,   0,   0, 100, -50, 100,
-	       	-100,-200, -50, -50, -50, -50,-200,-100, 
-	       	 100,-100, 100,  50,  50, 100,-100, 100
-        };
-
-    int naivety = inner_product(w.begin(), w.end(), positions.begin(), 0);
-
-	double corners;
-	// double aCorners;
-	// int pAvailableCorners = 0;
-	// int oAvailableCorners = 0;
+	int corners;
 	int cornerInds[4] = {0,7,56,63};
-	// int candidate;
-
-	// if (symbol == 1) {
-	// 	for (auto kv : validMoves) {
-	// 		candidate = kv.first;
-	// 		for (auto i : cornerInds) {
-	// 			if (candidate == i) {
-	// 				pAvailableCorners++;
-	// 			}
-	// 		}
-	// 	}
-	// } else {
-	// 	for (auto kv : otherValidMoves) {
-	// 		candidate = kv.first;
-	// 		for (auto i : cornerInds) {
-	// 			if (candidate == i) {
-	// 				oAvailableCorners++;
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// if (pAvailableCorners > oAvailableCorners) {
-	// 	aCorners = 100 * (pAvailableCorners * pAvailableCorners) / (pAvailableCorners + oAvailableCorners);
-	// } else if(oAvailableCorners > pAvailableCorners) {
-	// 	aCorners = -100 * (oAvailableCorners * oAvailableCorners) / (pAvailableCorners + oAvailableCorners);
-	// } else {
-	// 	aCorners = 0;
-	// }
-
-	// cout << pAvailableCorners << endl;
-	// cout << oAvailableCorners << endl;
 
 	int pCorners = 0;
 	int oCorners = 0;
@@ -350,33 +302,95 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 		corners = 0;
 	}
 
-	// double pivots;
-	// int pivotInds[] = {2,5,16,18,21,23,40,41,45,47,58,61};
+	vector <int> boardWeights = {
+        	 100,-100, 100,  50,  50, 100,-100, 100,
+        	-100,-200, -50, -50, -50, -50,-200,-100,
+        	 100, -50, 100,   0,   0, 100, -50, 100,
+        	  50, -50,  0,    0,   0,   0, -50,  50,
+        	  50, -50,  0,    0,   0,   0, -50,  50,
+        	 100, -50, 100,   0,   0, 100, -50, 100,
+	       	-100,-200, -50, -50, -50, -50,-200,-100, 
+	       	 100,-100, 100,  50,  50, 100,-100, 100
+        };
 
-	// int pPivots = 0;
-	// int oPivots = 0;
+    if (positions[0] != 0) {
+    	boardWeights[1]  = 0;
+    	boardWeights[2]  = 0;
+    	boardWeights[3]  = 0;
 
-	// for (auto i : pivotInds) {
-	// 	if (positions[i] == 1) {
-	// 		pPivots++;
-	// 	} else if (positions[i] == -1) {
-	// 		oPivots++;
-	// 	}
-	// } 
+    	boardWeights[8]  = 0;
+    	boardWeights[9]  = 0;
+    	boardWeights[10] = 0;
+    	boardWeights[11] = 0;
 
-	// if (pPivots > oPivots) {
-	// 	pivots = 100 * (pPivots * pPivots) / (pPivots + oPivots);
-	// } else if(oPivots > pPivots) {
-	// 	pivots = -100 * (oPivots * oPivots) / (pPivots + oPivots);
-	// } else {
-	// 	pivots = 0;
-	// }
+    	boardWeights[16] = 0;
+    	boardWeights[17] = 0;
+    	boardWeights[18] = 0;
 
+    	boardWeights[24] = 0;
+    	boardWeights[25] = 0;
+    }
+
+    if (positions[7] != 0) {
+    	boardWeights[6]  = 0;
+    	boardWeights[5]  = 0;
+    	boardWeights[4]  = 0;
+
+    	boardWeights[15] = 0;
+    	boardWeights[14] = 0;
+    	boardWeights[13] = 0;
+    	boardWeights[12] = 0;
+
+    	boardWeights[23] = 0;
+    	boardWeights[22] = 0;
+    	boardWeights[21] = 0;
+
+    	boardWeights[31] = 0;
+    	boardWeights[30] = 0;
+    }
+
+    if (positions[56] != 0) {
+    	boardWeights[57] = 0;
+    	boardWeights[58] = 0;
+    	boardWeights[59] = 0;
+
+    	boardWeights[48] = 0;
+    	boardWeights[49] = 0;
+    	boardWeights[50] = 0;
+    	boardWeights[51] = 0;
+
+    	boardWeights[40] = 0;
+    	boardWeights[41] = 0;
+    	boardWeights[42] = 0;
+
+    	boardWeights[32] = 0;
+    	boardWeights[33] = 0;
+    }
+
+    if (positions[63] != 0) {
+    	boardWeights[62] = 0;
+    	boardWeights[61] = 0;
+    	boardWeights[60] = 0;
+
+    	boardWeights[55] = 0;
+    	boardWeights[54] = 0;
+    	boardWeights[53] = 0;
+    	boardWeights[52] = 0;
+
+    	boardWeights[47] = 0;
+    	boardWeights[46] = 0;
+    	boardWeights[45] = 0;
+
+    	boardWeights[39] = 0;
+    	boardWeights[38] = 0;
+    }
+ 
+    int naivety = inner_product(boardWeights.begin(), boardWeights.end(), positions.begin(), 0);
 
 	int pStable = stableDiscs(positions,1);
 	int oStable = stableDiscs(positions,-1);
 
-	double stability;
+	int stability;
 
 	if (pStable > oStable) {
 		stability = 100 * (pStable ) / (pStable + oStable);
@@ -386,24 +400,28 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 		stability = 0;
 	}
 
-	// coin parity
+	// coin makeup
 	int d = accumulate(board.positions.begin(), board.positions.end(), 0);
 	int t = inner_product(board.positions.begin(),board.positions.end(),board.positions.begin(),0);
-	double parity = 100*d/t;
+	int makeup = 100*d/t;
 
-	// cout << "S" << endl;
-	// cout << mobility << endl;
-	// cout << potMobility << endl;
-	// cout << parity << endl;
-	// cout << corners << endl;
-	// cout << stability << endl;
+	// parity
+	int parity;
+	if (symbol == 1) {
+		if (t % 2 == 0) {
+			parity = -1;
+		} else {
+			parity = 1;
+		}
+	} else {
+		if (t % 2 == 0) {
+			parity = 1;
+		} else {
+			parity = -1;
+		}
+	}
 
-	// board.draw(validMoves,1);
-
-	// return round(w[0]*mobility + w[1]*potMobility + w[2]*PAI(board.nMoves)*parity + w[3]*corners + w[4]*stability + w[5]*pivots);
-	// return round(2*mobility + 1*potMobility + 1*PAI(board.nMoves)*parity + 1000000*corners + 3*stability + 10*pivots);
-	// return corners;
-	return 5*mobility + 2*potMobility + parity + naivety + 1000*corners + 1000*stability;
+	return 5*mobility + 2*potMobility + makeup + 5*naivety + 500*parity + 1000*corners + 1000*stability;
 }
 
 

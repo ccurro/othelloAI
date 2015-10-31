@@ -7,34 +7,15 @@
 #include <sstream>
 #include "game.h"
 
-pair<vector<int>,vector<int>> getWeightVector(int argc, char *argv[]) {
-    pair<vector <int>,vector<int>> w;
-
-    for (int i = 1; i < 3; i++) {
-        char * wStr = argv[i];
-        char c = wStr[0];
-        while (c != 0) {
-            if (c != ',') {
-                if (i == 1)
-                    w.first.push_back(c - '0');
-                if (i == 2)
-                    w.second.push_back(c - '0');
-            }
-            c = *wStr++;
-        }
-    }
-    return w;
-}
-
 float getTimeLimit() {
     float limit;
     bool validSelection = false;
     do {
         cout << "Pick time limit for computer: (seconds) ";        
 
-        std::string str;
+        string str;
         cin >> str;
-        std::istringstream iss(str);
+        istringstream iss(str);
         iss >> limit;
 
         if (iss.eof() == false) {
@@ -56,9 +37,9 @@ bool checkCPU(int id) {
     do {
         cout << "Is Player " << id << " a computer? y/n ";      
 
-        std::string str;
+        string str;
         cin >> str;
-        std::istringstream iss(str);
+        istringstream iss(str);
         iss >> c;
 
         cout << c << endl;
@@ -87,22 +68,19 @@ bool checkCPU(int id) {
 int main (int argc, char *argv[]) {
     othelloBoard board;
 
-    pair<vector <int>,vector<int>>  w; //= getWeightVector(argc, argv);
-
     int choice;
     cout << "Load a game or start a new one?\n";
     cout << "1 -> Load a saved board state\n";
     cout << "2 -> Start a new game\n";
-    // choice = 2;
 
     bool validSelection = false;
 
     do {
         cout << "Selection: ";
 
-        std::string str;
+        string str;
         cin >> str;
-        std::istringstream iss(str);
+        istringstream iss(str);
         iss >> choice;
 
         if (iss.eof() == false) {
@@ -114,27 +92,43 @@ int main (int argc, char *argv[]) {
         }
     } while (!validSelection);
 
-    bool cpu1 = checkCPU(1);
-    bool cpu2 = checkCPU(2);
-
-    float limit;
-    if (cpu1 || cpu2) {
-        limit = getTimeLimit();
-    }
-
-
-    othelloGame game (&board, false, false);
+    othelloGame game (&board);  
 
     if (choice == 1)
         game.newGame = false;
 
+    bool whiteMovesFirst = false;
+    bool cpu1;
+    bool cpu2;
+    float limit;
+
+    if (game.newGame) {
+
+        cpu1 = checkCPU(1);
+        cpu2 = checkCPU(2);
+
+        if (cpu1 || cpu2) {
+            limit = getTimeLimit();
+        }   
+
+        cout << "New Game\n";
+        game.firstMove();
+
+    } else {
+        string filename;
+        cout << "Give filename of savefile: ";
+        cin >> filename;
+        game.loadGame(filename, whiteMovesFirst, limit);
+
+        cpu1 = checkCPU(1);
+        cpu2 = checkCPU(2);
+    }
+
     heuristicEvaluation h1;
-    h1.w = w.first;
     h1.hIndex = 5;
 
     heuristicEvaluation h2;
-    h2.w = w.second;
-    h2.hIndex = 5; // 4 -> random
+    h2.hIndex = 4; // 4 -> random
 
     // humanPlayer, playerId, n, symbol 
     player playerOne (!cpu1, 1, board.n,-1, h1); // black
@@ -145,15 +139,9 @@ int main (int argc, char *argv[]) {
         playerTwo.limit = limit;
     }
 
-
-    if (game.newGame) {
-        cout << "New Game\n";
-        game.firstMove();
-    } else {
-        string filename;
-        cout << "Give filename of savefile: ";
-        cin >> filename;
-        game.loadGame(filename);
+    if (whiteMovesFirst) {
+        game.move(playerTwo);
+        game.statusUpdate();
     }
 
     while (!game.complete) {

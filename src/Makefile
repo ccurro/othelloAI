@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -g -O3 -std=c++11 -march=native
+CFLAGS = -O3 -std=c++11 -march=native
 
 all: othello
 

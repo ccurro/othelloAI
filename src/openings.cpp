@@ -6,19 +6,13 @@
 using namespace std;
 
 openings::openings() {
-	// sequences = generateData();
 }
 
 list<list<int>> openings::generateData(int symbol) {
 	char fName[18];
-	int nLines;
-	if (symbol == 1) {
-		sprintf(fName,"%s","whiteOpenings.csv");
-		nLines = 224;
-	} else {
-		sprintf(fName,"%s","blackOpenings.csv");
-		nLines = 397;
-	}
+	sprintf(fName,"%s","lib/openings.csv");
+	int nLines = 620;
+
 	ifstream database (fName,ifstream::in);
 	char line[1024];
 	list<list<int>> seq;
@@ -42,37 +36,6 @@ list<list<int>> openings::generateData(int symbol) {
 
 	return seq;
 }
-
-// pair<bool, pair<int,list<int>>> openings::getMove(unordered_map<int, list<int>> validMoves) {
-// 	pair<int,list<int>> move;	
-// 	bool found = false;
-// 	pair<bool, pair<int,list<int>>> moveStatus;
-// 	unordered_map<int, list<int>>::const_iterator candPtr;
-// 	pair<int, list<int>> candidate;
-// 	for (auto & sequence : sequences ) {
-// 		for (candPtr = validMoves.begin(); candPtr != validMoves.end(); candPtr++) {
-// 			candidate = *candPtr;
-// 			if (candidate.first == sequence.front()) {
-// 				move = candidate;
-// 				found = true;
-// 				break;
-// 			}
-// 		}
-// 		cout << "B" << endl;
-// 		cout << sequence.front() << endl;
-// 		sequence.pop_front();
-// 		sequence.pop_front();
-// 		cout << sequence.front() << endl;
-// 		cout << "E" << endl;
-// 		if (found)
-// 			break;
-// 	}
-
-// 	moveStatus.first = found;
-// 	moveStatus.second = move;
-
-// 	return moveStatus;
-// }
 
 pair<bool, pair<int,list<int>>> openings::getMove(unordered_map<int, list<int>> validMoves, list<int> pastMoves) {
 	pair<int,list<int>> move;	

@@ -15,7 +15,6 @@ class heuristicEvaluation {
 	private:
 		int heuristic5(othelloBoard board, int nSpacesRemaining,int symbol);
 	public:
-		vector<int> w;
 		int hIndex = 0;
     	int heuristic(othelloBoard board, int nSpacesRemaining, int symbol);
 	    heuristicEvaluation();

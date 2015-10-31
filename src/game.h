@@ -9,12 +9,11 @@ othelloBoard* board;
 public:
     bool complete = false; // boolean if game is complete or not.
     bool newGame = true;
-    bool humanPlayer, humanPlayerFirst;
     int passes[2];
 
-    othelloGame(othelloBoard* a, bool b, bool c);
+    othelloGame(othelloBoard* a);
 
-	void loadGame(string gameFileName);
+	void loadGame(string gameFileName, bool & whiteMovesFirst, float & limit);
     void firstMove();
 
     void move(player p);

@@ -27,7 +27,7 @@ chrono::duration<double> toc(chrono::time_point<std::chrono::system_clock> start
 pair<int,pair<int,list<int>>> player::alphaBeta(othelloBoard board, int maxDepth, int depth, unordered_map<int,int> & moveOrder, int alpha, int beta, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start) {
     pair<int,pair<int,list<int>>> scoreMove;
     chrono::duration<double> elapsed_seconds = toc(start);
-    if (elapsed_seconds.count() > 0.999*limit) {
+    if (elapsed_seconds.count() > 0.99*limit) {
         if (!maximizingPlayer) {
             scoreMove.first = numeric_limits<int>::max() -1;
             return scoreMove;
@@ -41,15 +41,12 @@ pair<int,pair<int,list<int>>> player::alphaBeta(othelloBoard board, int maxDepth
     int bestValue;
     int currSymbol;
     if (maximizingPlayer) {
-        board.validMoves(validMoves,symbol);
         currSymbol = symbol;
     } else {
-        board.validMoves(validMoves,-symbol);
         currSymbol = -symbol;
     }
 
     if (depth < 1) {        
-    // if (depth < 1 || validMoves.begin() == validMoves.end()) {        
         // call heuristic - in this case most piece
         bestValue = heuristic.heuristic(board,60 - board.nMoves,currSymbol);
         if (symbol == -1)
@@ -57,6 +54,8 @@ pair<int,pair<int,list<int>>> player::alphaBeta(othelloBoard board, int maxDepth
         scoreMove.first = bestValue;
         return scoreMove;
     }
+
+    board.validMoves(validMoves,currSymbol);
 
     if (validMoves.size() == 0) {
         unordered_map<int, list<int>> otherValidMoves;
@@ -157,7 +156,6 @@ pair<int,pair<int,list<int>>> player::alphaBeta(othelloBoard board, int maxDepth
 pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int, list<int>> validMoves) {
         chrono::time_point<std::chrono::system_clock> start = tic();
 
-        // alphabeta
         int nodesVisited = 0;
         pair<int, list<int>> move;
 
@@ -167,15 +165,13 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
             return move;
         }
 
-        // if (board.nMoves < 18) {
-        //     pair<bool,pair<int,list<int>>> bookLookup = openingDatabase.getMove(validMoves, board.pastMoves);
-        //     if (bookLookup.first) {
-        //         cout << "Move found in opening database." << endl;
-        //         return bookLookup.second;
-        //     } else {
-        //         cout << "Opening lookup failed, resort to search." << endl;
-        //     }
-        // }
+        if (board.nMoves < 18) {
+            pair<bool,pair<int,list<int>>> bookLookup = openingDatabase.getMove(validMoves, board.pastMoves);
+            if (bookLookup.first) {
+                cout << "Move found in opening database." << endl;
+                return bookLookup.second;
+            } 
+        }
 
         pair<int, list<int>> tmpmove;
 
@@ -185,19 +181,18 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
 
         int alpha = -bigNo;
         int beta = bigNo;
+        bool fullSearch = false;    
         int d;
 
         for (d = 1; d < 60 - board.nMoves + 1; d++) {
-        // for (d = 7; d < 8; d++) {        
             int bestVal = -bigNo;
-            // bool fullSearch = false;    
-            // if (60 - board.nMoves < 12) {
-            //     d = 60 - board.nMoves + 1;
-            //     fullSearch = true;
-            // }
-            // cout << "Spaces remaining on the board: " << 60 - board.nMoves << endl;
+
+            if (60 - board.nMoves < 10) {
+                d = 60 - board.nMoves + 1;
+                fullSearch = true;
+            }
+
             cout << "Searching at depth " << d << endl;
-            int val;
 
             pair<int,pair<int,list<int>>> moveScore = alphaBeta(board,d, d, moveOrder, alpha, beta, true, nodesVisited, start);
             if (moveScore.first > bestVal && moveScore.first != (numeric_limits<int>::max() -1) && moveScore.first != (numeric_limits<int>::min() -1)) {
@@ -218,7 +213,9 @@ pair<int, list<int>> player::computerMove(othelloBoard board, unordered_map<int,
         }
 
         chrono::duration<double> elapsed_seconds = toc(start);
-        cout << "\nCompleted search to depth " << d - 1 << endl;
+        if (!fullSearch) {
+            cout << "\nCompleted search to depth " << d - 1 << endl;
+        }
         cout << "\nNodes visited: " << nodesVisited << endl; 
         cout << "Time to move: " << elapsed_seconds.count() << " seconds" << endl << endl;
 
@@ -235,9 +232,9 @@ pair<int, list<int>> player::interactiveMove(unordered_map<int, list<int>> valid
         do {
             cout << "Pick Move: ";
 
-            std::string str;
+            string str;
             cin >> str;
-            std::istringstream iss(str);
+            istringstream iss(str);
             iss >> ind;
 
             if (iss.eof() == false) {

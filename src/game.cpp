@@ -15,13 +15,8 @@ void ind2subg(const int sub,const int cols,const int rows,int *row,int *col) {
 }
 
 
-othelloGame::othelloGame(othelloBoard* a, bool b, bool c) {
+othelloGame::othelloGame(othelloBoard* a) {
 	board = a; 
-	humanPlayer = b;
-	humanPlayerFirst = c;
-	assert(!(!humanPlayer && humanPlayerFirst)); 
-        // make sure humanPlayerFirst isn't true, when there
-        // isn't a human player.
 }
 
 void othelloGame::firstMove() {
@@ -34,7 +29,7 @@ void othelloGame::firstMove() {
 	board->positions.swap(pos);
 }
 
-void othelloGame::loadGame(string gameFileName) {
+void othelloGame::loadGame(string gameFileName, bool & whiteMovesFirst, float & limit) {
 	vector<int> pos(board->n,0);
 	ifstream gameFile;
 	string line;
@@ -47,7 +42,8 @@ void othelloGame::loadGame(string gameFileName) {
 	}
 
 	int ind = 0;
-	while (getline(gameFile,line)) {
+	for (int j = 0; j < 8; j++) {
+		getline(gameFile,line);
 		for (int i = 0; i < 16; i+=2) {
 			char c = line[i];
 			if (c == 'B')
@@ -59,7 +55,19 @@ void othelloGame::loadGame(string gameFileName) {
 			ind++;
 		}
 	}
+
+	getline(gameFile,line);
+	char c = line[0];
+	if (c == 'W') {
+		whiteMovesFirst = true;
+	}
+
+	getline(gameFile,line);
+
+	limit = stof(line);
+
 	board->nMoves = inner_product(pos.begin(),pos.end(),pos.begin(),0);
+	cout << "Board n moves " << board->nMoves << endl;
 	board->positions.swap(pos);
 	gameFile.close();
 }
