@@ -129,14 +129,12 @@ int main (int argc, char *argv[]) {
         game.newGame = false;
 
     heuristicEvaluation h1;
-    // h1.hIndex = (*argv[1] - '0');
     h1.w = w.first;
     h1.hIndex = 5;
 
     heuristicEvaluation h2;
-    // h2.hIndex = (*argv[2] - '0');
     h2.w = w.second;
-    h2.hIndex = 4; // 4 -> random
+    h2.hIndex = 5; // 4 -> random
 
     // humanPlayer, playerId, n, symbol 
     player playerOne (!cpu1, 1, board.n,-1, h1); // black

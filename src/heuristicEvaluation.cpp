@@ -408,10 +408,7 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 
 
 int heuristicEvaluation::heuristic(othelloBoard board, int nSpacesRemaining,int symbol) {
-	if (hIndex == 1) {
-	} else if (hIndex == 2) {
-	} else if (hIndex == 3) {
-	} else if (hIndex == 4) {
+	if (hIndex == 4) {
 		return heuristic4(board, nSpacesRemaining,symbol);
 	} else if (hIndex == 5) {
 		return heuristic5(board, nSpacesRemaining,symbol);
@@ -421,7 +418,3 @@ int heuristicEvaluation::heuristic(othelloBoard board, int nSpacesRemaining,int 
 heuristicEvaluation::heuristicEvaluation() {
 
 }
-
-// int main() {
-// 	cout << "Hello World";
-// }
