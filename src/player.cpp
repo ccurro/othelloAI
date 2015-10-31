@@ -82,7 +82,6 @@ pair<int,pair<int,list<int>>> player::alphaBeta(othelloBoard board, int maxDepth
         // do for potential best move first, then remove it from valid moves list
         int k = moveOrder[maxDepth - depth];
         if(validMoves.find(k) != validMoves.end() ) {
-            // cout << "Hey oh!" << endl;
             pair<int,list<int>> kv = *validMoves.find(k);
             othelloBoard scratchBoard = board;
             scratchBoard.updatePositions(kv,symbol);
