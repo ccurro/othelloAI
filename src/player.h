@@ -11,7 +11,7 @@ class player {
 
     openings openingDatabase;
     heuristicEvaluation heuristic;
-    int alphaBeta(othelloBoard board, int depth, int alpha, int beta, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start);
+    pair<int,pair<int,list<int>>> alphaBeta(othelloBoard board, int maxDepth, int depth, int alpha, int beta, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start);
     int miniMax(othelloBoard board, int depth, bool maximizingPlayer, int & nodesVisited, chrono::time_point<std::chrono::system_clock> start);
     pair<int, list<int>> computerMove(othelloBoard board, unordered_map<int, list<int>> validMoves);
 
