@@ -205,30 +205,6 @@ int potentialMobility(vector <int> positions, int symbol) {
 	return potMobilility;
 }
 
-
-int ESAC(int moveNumber) {
-    return 312 + 6.24*moveNumber;
-}
-
-int CMAC(int moveNumber) {
-    if (moveNumber < 25) 
-        return 50 + 2*moveNumber;
-    if (moveNumber > 25)
-        return 75 + moveNumber;
-}
-
-int PAI(int moveNumber) {
-	if (moveNumber < 30) {
-		return 0.5;
-	} else if (moveNumber > 30) {
-		return 100;
-	}
-}
-
-int heuristic4(othelloBoard board, int nSpacesRemaining,int symbol) {
-	return rand() % 10;
-}
-
 int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int symbol) {
     // do heuristic from perspective of player with p.symbol = 1
 	int val = 0;
@@ -426,11 +402,7 @@ int heuristicEvaluation::heuristic5(othelloBoard board, int nSpacesRemaining,int
 
 
 int heuristicEvaluation::heuristic(othelloBoard board, int nSpacesRemaining,int symbol) {
-	if (hIndex == 4) {
-		return heuristic4(board, nSpacesRemaining,symbol);
-	} else if (hIndex == 5) {
-		return heuristic5(board, nSpacesRemaining,symbol);
-	}
+	return heuristic5(board, nSpacesRemaining,symbol);
 }
 
 heuristicEvaluation::heuristicEvaluation() {

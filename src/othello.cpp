@@ -124,15 +124,11 @@ int main (int argc, char *argv[]) {
         cpu2 = checkCPU(2);
     }
 
-    heuristicEvaluation h1;
-    h1.hIndex = 5;
-
-    heuristicEvaluation h2;
-    h2.hIndex = 4; // 4 -> random
+    heuristicEvaluation h;
 
     // humanPlayer, playerId, n, symbol 
-    player playerOne (!cpu1, 1, board.n,-1, h1); // black
-    player playerTwo (!cpu2, 0, board.n,1,  h2);  // white
+    player playerOne (!cpu1, 1, board.n,-1, h); // black
+    player playerTwo (!cpu2, 0, board.n,1,  h);  // white
 
     if (cpu1 || cpu2) {
         playerOne.limit = limit;
