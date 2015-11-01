@@ -41,11 +41,10 @@ void othelloBoard::draw(unordered_map<int, list<int>> moves, int symbol) {
     for (auto kv : moves) {
         ind2sub(kv.first, width, height, &row, &col);
         cout << "Possible Move " << i << ": " << alpha[col] << nums[row] << ", ";
-        list<int>::const_iterator k;
         list<int> l = kv.second;
         cout << "Pieces to be flipped:";
-        for (k = l.begin(); k != l.end(); k++) {
-            ind2sub(*k, width, height, &row, &col);
+        for (auto k : l) {
+            ind2sub(k, width, height, &row, &col);
             cout << " "<< alpha[col] << nums[row] << ",";
         }
 
@@ -128,14 +127,13 @@ void othelloBoard::updatePositions (pair<int, list<int>> move, int symbol) {
 
     int piece = move.first;
     pastMoves.push_back(piece);
-    list<int>::const_iterator k;
 
     positions[piece] = symbol;
 
     list<int> l = move.second;
 
-    for (k = l.begin(); k != l.end(); k++) {
-        positions[*k] = symbol;
+    for (auto k : l) {
+        positions[k] = symbol;
     }
 
     nMoves++;
