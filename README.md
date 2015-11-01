@@ -4,9 +4,11 @@ An Othello/Reversi game with an AI that searches the game tree via a mini-max se
 
 ### Requirements
 
-A terminal with 
-- Unicode support
-- xterm-256-color code support
+* A terminal with 
+  - Unicode support
+  - xterm-256-color code support
+
+* A font with Unicode characters (e.g. DejaVu Sans Mono)
 
 In a supported terminal the game will appear as below:
 
@@ -83,8 +85,12 @@ combination of these statistics:
 - Stability (measures ratio of the number of the player's stable discs compared to opponents; offers only a lower bound on the number of stable discs, it does not actually compute the exact number for performance reasons; weighted highly)
 - Parity (measures which player is expected to have the final move; weighted highly)
 
+### Notes
+
+- Compiled with `-O3` and `-march=native` flags; in my testing these didn't seem to introduce any bugs or other issues, but if you run into any bugs please remove these flags in the [Makefile](./src/Makefile), then `make clean` and re-make.
+
 
 ### Acknowledgments
 
 - Stephen Leone for his willingness to discuss Othello search and heuristic strategies
-- Abdullah Siddiki and Gavin Kaplan for playing against my AI so that I could evaluate its performance.
+- Abdullah Siddiki and Gavin Kaplan for playing against my AI so that I could evaluate its performance
