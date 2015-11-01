@@ -23,11 +23,11 @@ $ make
 $ ./othello
 ```
 
-At startup the program will prompt the user whether they would like to start a
-new game or load a partially completed game. An [example file](./exampleBoard)
-is included. The first 8 lines correspond to the board positions, the 9th
-identifies the next player to move, and the final line is the time limit for
-computer players.
+At startup the program will prompt the user asking whether they would like to
+start a new game or load a partially completed game. An [example
+file](./exampleBoard) is included. The first 8 lines correspond to the board
+positions, the 9th identifies the next player to move, and the final line is
+the time limit for computer players.
 
 ### Details on the AI
 
@@ -40,7 +40,7 @@ algorithm.
 
 #### Search algorithm 
 
-The search algorithm is a straight forward mini-max search with alpha/beta
+The search algorithm is a straightforward mini-max search with alpha/beta
 pruning and iterative deepening - the only extra twist is the implementation
 of the so called "killer-heuristic". After each depth-limited search the
 optimal path down the tree for that search is saved and is used as the search
