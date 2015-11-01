@@ -15,8 +15,8 @@ In a supported terminal the game will appear as below:
 ### How to build and run
 
 ```
-git clone https://github.com/ccurro/othelloAI.git
-cd othelloAI
-make
-./othello
+$ git clone https://github.com/ccurro/othelloAI.git
+$ cd othelloAI
+$ make
+$ ./othello
 ```
